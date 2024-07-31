@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Homes on About Me</title>
+    <link>http://localhost:1313/home/</link>
+    <description>Recent content in Homes on About Me</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="http://localhost:1313/home/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>http://localhost:1313/home/features/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/home/features/</guid>
+      <description> 僕は持っている資格 普通免許（AT解除） 国家二級備士（ガソリンとディーゼル） 日本語検定１級 趣味 車でドライブすること 料理をすること 写真を撮ること 旅すること </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/home/usage/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/home/usage/</guid>
+      <description> ここからは今までの人生経験 初めて日本に来たのが ２０１９年の１０月、留学というきっかけに、岐阜県にある自動車専門短大に入りました。&#xA;中日本自動車短期大学 半年間の日本語勉強と２年間の自動車工学&#xA;中日本自動車短期大学に居た時 ラーメン屋とコンビニのバイトを経験したことがあります&#xA;# スガキヤ（坂祝町ゼント店） 2019.12 ~ 2021.7 --- # ファミリーマート（坂祝町西町店） 2021.6 ~ 2020.3 卒業後 派遣会社に就職して、北海道にある [ホンダカーズ札幌中央]に派遣されました。 仕事のメインは納車準備と洗車、たまに点検の仕事もしました。 2020.4 ~ 2021.4&#xA;半年くらいの働きの間に、転職という考えが出ました。 このままじゃ何もならず一生終わるという危機感が転職の原因だと思っています。 results :&#xA;graph LR A --&gt; B B --&gt; C 🍊 結果は、やめて今の会社に入った&#xA;カローラ愛知（新城店） 2021.4 ~ 現在&#xA;🍉 正直にいうと、前のところよりだいぶ変わってきました。初めて正社員として働いて、もらった給料だけじゃなくて、いろんな福利厚生もあります。 </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/home/configuration/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/home/configuration/</guid>
+      <description>自分について 北海道からの転職は確かにすごく変わってきましたが、自分の能力不足とか、言語障害とか、今の会社にすごく厳しい状態になっています。それどうやって工夫して攻略できるのが僕目の前の課題です。&#xA;だめだとしても、ここで生きるためには頑張らないといけないです。&#xA;自分の弱いところ 急いでる時に結構ミスをするのが最近の仕事中よくあります。あと質問される時に、すぐ答えられない時にもあります。聞き取りが弱くて、よく聞き間違えることがあります。&#xA;自分の強いところ 諦めずに働くのが多分自分からすれば、一番強いところです。&#xA;人間関係 自分は自分が人畜無害の人だと思っています。キレることもほぼないです。&#xA;中国 順番 年数 学校名もしくは勤務地 小学校 2000 ~ 2006 サンエン小学校 中学校 2006 ~ 2008 ダイキュウ中学校 高校 2008 ~ 2010 キブン高校 自宅警備員 2010 ~ 2013 自宅 広告会社 2013 ~ 2015 自宅の近く ウェブ開発会社 2018 ~ 2019.5 自宅ちょっと離れてるところ 🍎 中国に居た間に、いろんなバイトをした経験があります。学歴ない僕がこの厳しい社会に何度も何度も&#xA;今年は３１歳です。この年だから、転職するのも簡単じゃないと思っています。</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/home/shortcodes/introduction/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/home/shortcodes/introduction/</guid>
+      <description>next カローラ愛知（新城店）普段の仕事内容&#xA;点検整備、無料点検から、プロケア検（半年点検）、一年（１２ヶ月）点検および車検&#xA;一般整備したこともあるけど、ウォータポンプの交換（パッソ）、ハブボルトの交換（シエンタ）、ベルト交換（ルーミ（オートテンション））</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/home/shortcodes/fragment/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/home/shortcodes/fragment/</guid>
+      <description>得意な分野 Nginx Laravel &amp;amp;&amp;amp; Php React &amp;amp;&amp;amp; JavaScript Swift &amp;amp;&amp;amp; SwiftUI </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/home/shortcodes/slide/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/home/shortcodes/slide/</guid>
+      <description>ここからは自己紹介 一番好きな歌手　→ ヨルシカ&#xA;性格 穏やかな性格です。常に冷静を保って行動しています。分析力が強いです。&#xA;普段の生活 車を買ってから、ドライブすることが好きになって、休みの日に大体車で家周辺の辺へ探検しに行きます。いつか自分のパッソで日本全国４７都道府県を制覇したいです。&#xA;旅の写真　ー　熊野市の山奥のところ 🍜　今の会社、本当にすごくいい会社だと思っています。入社一年以上を立って、いろんな体験ができました。本当にこの会社に入ったのがありがたいです。</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/home/shortcodes/markdown/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/home/shortcodes/markdown/</guid>
+      <description> </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/home/shortcodes/other/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/home/shortcodes/other/</guid>
+      <description>好きなスポーツ 運動神経ないけど、バスケットボールは好きです&#xA;You found the speaker notes! 好きな料理 家系ラーメンが好きです&#xA;好きな女 優しい女です</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/home/resources/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/home/resources/</guid>
+      <description>ここが終わりです 🙏 ありがとうございました！&#xA;Thank You Very Much ! ↩️ Start over 僕のブログ</description>
+    </item>
+  </channel>
+</rss>

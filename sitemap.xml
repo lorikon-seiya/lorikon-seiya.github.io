@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>http://localhost:1313/home/features/</loc>
+  </url><url>
+    <loc>http://localhost:1313/home/usage/</loc>
+  </url><url>
+    <loc>http://localhost:1313/home/configuration/</loc>
+  </url><url>
+    <loc>http://localhost:1313/home/shortcodes/introduction/</loc>
+  </url><url>
+    <loc>http://localhost:1313/home/shortcodes/fragment/</loc>
+  </url><url>
+    <loc>http://localhost:1313/home/shortcodes/slide/</loc>
+  </url><url>
+    <loc>http://localhost:1313/home/shortcodes/markdown/</loc>
+  </url><url>
+    <loc>http://localhost:1313/home/shortcodes/other/</loc>
+  </url><url>
+    <loc>http://localhost:1313/home/resources/</loc>
+  </url><url>
+    <loc>http://localhost:1313/</loc>
+  </url><url>
+    <loc>http://localhost:1313/categories/</loc>
+  </url><url>
+    <loc>http://localhost:1313/home/</loc>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+  </url>
+</urlset>
