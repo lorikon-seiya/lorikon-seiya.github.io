@@ -1,7 +1,37 @@
 import { defineConfig } from 'vitepress'
+import viteImagemin from 'vite-plugin-imagemin'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  vite: {
+    plugins: [
+      viteImagemin({
+        gifsicle: { optimizationLevel: 7 },
+        pngquant: { quality: [0.8, 0.9] },
+        mozjpeg: { quality: 80 },
+        svgo: true,
+      })
+    ]
+  },
+  head: [
+    [
+      'script',
+      { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-JFB80PQ3PC' }
+    ],
+    [
+      'script',
+      {},
+      `window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JFB80PQ3PC');`
+    ]
+  ],
+  markdown: {
+    image: {
+      lazyLoading: true   // 开启图片懒加载
+    }
+  },
   base: '/',   // 必须和 GitHub 仓库名一致
   logo: '/logo.png',
   title: "ccc",
@@ -57,9 +87,9 @@ export default defineConfig({
 
     // 最后更新时间
     lastUpdated: {
-      text: '最后更新于',
+      text: 'lastUpdated',
       formatOptions: {
-        dateStyle: 'short'
+        dateStyle: 'full'
       }
     },
   }
