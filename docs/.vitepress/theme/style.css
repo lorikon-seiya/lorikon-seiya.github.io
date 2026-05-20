@@ -1,0 +1,18 @@
+:root {
+    /* 主色调，影响链接、按钮、高亮 */
+    --vp-c-brand-1: #5a67d8;
+    --vp-c-brand-2: #4c51bf;
+    --vp-c-brand-3: #667eea;
+
+    /* 正文字体 */
+    --vp-font-family-base: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+
+    /* 代码字体 */
+    --vp-font-family-mono: 'Fira Code', 'JetBrains Mono', monospace;
+}
+
+.dark {
+    --vp-c-brand-1: #667eea;
+    --vp-c-brand-2: #7f9cf5;
+    --vp-c-brand-3: #a3bffa;
+}
