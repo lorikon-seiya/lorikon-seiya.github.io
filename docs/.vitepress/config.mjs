@@ -10,6 +10,7 @@ export default defineConfig({
         pngquant: { quality: [0.8, 0.9] },
         mozjpeg: { quality: 80 },
         svgo: true,
+        // 删掉或注释掉 jpeg 相关，改用 mozjpeg
       })
     ]
   },
@@ -45,7 +46,7 @@ export default defineConfig({
       { text: 'Posts', link: '/posts/' },
       { text: 'About', link: '/about' }
     ],
-    outline: false,
+    // outline: false,
 
     sidebar: {
       '/posts/': [

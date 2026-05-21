@@ -56,8 +56,10 @@ export default {
         app.component('PostList', PostList)
 
         // router：路由钩子
-        router.onBeforeRouteChange = () => NProgress.start()
-        router.onAfterRouteChange = () => NProgress.done()
+        if (typeof window !== 'undefined') {
+            router.onBeforeRouteChange = () => NProgress.start()
+            router.onAfterRouteChange = () => NProgress.done()
+        }
     },
     Layout() {
         return h(DefaultTheme.Layout, null, {
