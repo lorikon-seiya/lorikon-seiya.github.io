@@ -16,3 +16,7 @@
     --vp-c-brand-2: #7f9cf5;
     --vp-c-brand-3: #a3bffa;
 }
+
+#nprogress .bar {
+    background: var(--vp-c-brand-1) !important;
+}

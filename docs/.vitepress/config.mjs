@@ -14,6 +14,8 @@ export default defineConfig({
     ]
   },
   head: [
+    // ['link', { rel: 'icon', href: '/favicon.ico' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     [
       'script',
       { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-JFB80PQ3PC' }
@@ -33,10 +35,10 @@ export default defineConfig({
     }
   },
   base: '/',   // 必须和 GitHub 仓库名一致
-  logo: '/logo.png',
   title: "ccc",
   description: "blog",
   themeConfig: {
+    // logo: '/IMG_0906.JPG',
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },

@@ -1,3 +1,5 @@
+import "./chunk-BUSYA2B4.js";
+
 // node_modules/.pnpm/@giscus+vue@3.1.1_vue@3.5.34/node_modules/@giscus/vue/dist/giscus-Ci9LqPcC.js
 var H = globalThis;
 var V = H.ShadowRoot && (H.ShadyCSS === void 0 || H.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype;
@@ -946,4 +948,4 @@ p = $([
 export {
   p as GiscusWidget
 };
-//# sourceMappingURL=giscus-Ci9LqPcC-PGQCHFPG.js.map
+//# sourceMappingURL=giscus-Ci9LqPcC-LKITIINL.js.map
