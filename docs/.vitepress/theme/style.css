@@ -5,12 +5,10 @@
     --vp-font-family-base: 'Noto Sans SC', 'PingFang SC', sans-serif;
     --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-    /* 品牌色 - 自然绿 */
     --vp-c-brand-1: #4a7c59;
     --vp-c-brand-2: #3d6b4a;
     --vp-c-brand-3: #5a9970;
 
-    /* 背景色 - 暖白 */
     --vp-c-bg: #faf9f7;
     --vp-c-bg-soft: #f3f1ec;
     --vp-c-bg-mute: #eceae3;
@@ -21,22 +19,25 @@
     --vp-c-brand-2: #7ec99b;
     --vp-c-brand-3: #5aaa7a;
 
-    /* 深色模式 - 深暖灰 */
     --vp-c-bg: #1c1b18;
     --vp-c-bg-soft: #242320;
     --vp-c-bg-mute: #2e2c28;
 }
 
 /* ==================
-   导航栏
+   导航栏：只针对桌面端加毛玻璃
+   手机端不动，避免下拉菜单出问题
 ================== */
-.VPNav {
-    backdrop-filter: blur(12px);
-    background: rgba(250, 249, 247, 0.85) !important;
-}
+@media (min-width: 768px) {
+    .VPNav {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        background: rgba(250, 249, 247, 0.88) !important;
+    }
 
-.dark .VPNav {
-    background: rgba(28, 27, 24, 0.85) !important;
+    .dark .VPNav {
+        background: rgba(28, 27, 24, 0.88) !important;
+    }
 }
 
 /* ==================
@@ -48,7 +49,6 @@
     color: var(--vp-c-text-1);
 }
 
-/* 正文用衬线字体，更有书感 */
 .vp-doc p,
 .vp-doc li,
 .vp-doc blockquote {
@@ -68,7 +68,7 @@
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1.4;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.6em;
 }
 
 .vp-doc h2 {
@@ -96,11 +96,12 @@
     border-radius: 12px;
     max-width: 100%;
     cursor: zoom-in;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s, transform 0.2s;
 }
 
 .vp-doc img:hover {
     opacity: 0.92;
+    transform: scale(1.01);
 }
 
 /* 图片说明 */
@@ -120,10 +121,10 @@
 ================== */
 .vp-doc blockquote {
     margin: 2em 0;
-    padding: 1.2em 1.6em;
+    padding: 1.2em 1.6em 1.2em 2em;
     border-left: 3px solid var(--vp-c-brand-1);
     background: var(--vp-c-bg-soft);
-    border-radius: 0 10px 10px 0;
+    border-radius: 0 12px 12px 0;
     font-style: normal;
     color: var(--vp-c-text-1);
     position: relative;
@@ -132,18 +133,18 @@
 .vp-doc blockquote::before {
     content: '"';
     position: absolute;
-    top: -10px;
-    left: 16px;
-    font-size: 48px;
+    top: -8px;
+    left: 14px;
+    font-size: 52px;
     color: var(--vp-c-brand-1);
-    opacity: 0.3;
+    opacity: 0.2;
     font-family: Georgia, serif;
     line-height: 1;
+    pointer-events: none;
 }
 
 .vp-doc blockquote p {
     margin: 0;
-    padding-left: 0.5em;
 }
 
 /* ==================
@@ -260,7 +261,44 @@
 }
 
 /* ==================
-   NProgress 颜色
+   选中文字颜色
+================== */
+::selection {
+    background: rgba(74, 124, 89, 0.2);
+    color: var(--vp-c-text-1);
+}
+
+/* ==================
+   滚动条
+================== */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--vp-c-divider);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--vp-c-brand-1);
+}
+
+/* ==================
+   页脚
+================== */
+.VPFooter {
+    background: var(--vp-c-bg-soft) !important;
+    border-top: 1px solid var(--vp-c-divider) !important;
+}
+
+/* ==================
+   NProgress
 ================== */
 #nprogress .bar {
     background: var(--vp-c-brand-1) !important;
