@@ -1,22 +1,267 @@
+/* ==================
+   全局字体 & 颜色
+================== */
 :root {
-    /* 主色调，影响链接、按钮、高亮 */
-    --vp-c-brand-1: #5a67d8;
-    --vp-c-brand-2: #4c51bf;
-    --vp-c-brand-3: #667eea;
+    --vp-font-family-base: 'Noto Sans SC', 'PingFang SC', sans-serif;
+    --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-    /* 正文字体 */
-    --vp-font-family-base: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    /* 品牌色 - 自然绿 */
+    --vp-c-brand-1: #4a7c59;
+    --vp-c-brand-2: #3d6b4a;
+    --vp-c-brand-3: #5a9970;
 
-    /* 代码字体 */
-    --vp-font-family-mono: 'Fira Code', 'JetBrains Mono', monospace;
+    /* 背景色 - 暖白 */
+    --vp-c-bg: #faf9f7;
+    --vp-c-bg-soft: #f3f1ec;
+    --vp-c-bg-mute: #eceae3;
 }
 
 .dark {
-    --vp-c-brand-1: #667eea;
-    --vp-c-brand-2: #7f9cf5;
-    --vp-c-brand-3: #a3bffa;
+    --vp-c-brand-1: #6db88a;
+    --vp-c-brand-2: #7ec99b;
+    --vp-c-brand-3: #5aaa7a;
+
+    /* 深色模式 - 深暖灰 */
+    --vp-c-bg: #1c1b18;
+    --vp-c-bg-soft: #242320;
+    --vp-c-bg-mute: #2e2c28;
 }
 
+/* ==================
+   导航栏
+================== */
+.VPNav {
+    backdrop-filter: blur(12px);
+    background: rgba(250, 249, 247, 0.85) !important;
+}
+
+.dark .VPNav {
+    background: rgba(28, 27, 24, 0.85) !important;
+}
+
+/* ==================
+   文章页整体
+================== */
+.vp-doc {
+    font-size: 16.5px;
+    line-height: 2;
+    color: var(--vp-c-text-1);
+}
+
+/* 正文用衬线字体，更有书感 */
+.vp-doc p,
+.vp-doc li,
+.vp-doc blockquote {
+    font-family: 'Noto Serif SC', 'STSong', Georgia, serif;
+    letter-spacing: 0.02em;
+}
+
+.vp-doc p {
+    margin: 1.4em 0;
+}
+
+/* ==================
+   标题
+================== */
+.vp-doc h1 {
+    font-size: 2em;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.4;
+    margin-bottom: 0.5em;
+}
+
+.vp-doc h2 {
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-top: 2.5em;
+    margin-bottom: 0.8em;
+    padding-bottom: 0.4em;
+    border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.vp-doc h3 {
+    font-size: 1.15em;
+    font-weight: 600;
+    margin-top: 2em;
+    margin-bottom: 0.6em;
+}
+
+/* ==================
+   图片
+================== */
+.vp-doc img {
+    display: block;
+    margin: 2.5em auto;
+    border-radius: 12px;
+    max-width: 100%;
+    cursor: zoom-in;
+    transition: opacity 0.2s;
+}
+
+.vp-doc img:hover {
+    opacity: 0.92;
+}
+
+/* 图片说明 */
+.vp-doc img+em {
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    color: var(--vp-c-text-2);
+    margin-top: -1.8em;
+    margin-bottom: 2.5em;
+    font-style: normal;
+    letter-spacing: 0.05em;
+}
+
+/* ==================
+   引用块
+================== */
+.vp-doc blockquote {
+    margin: 2em 0;
+    padding: 1.2em 1.6em;
+    border-left: 3px solid var(--vp-c-brand-1);
+    background: var(--vp-c-bg-soft);
+    border-radius: 0 10px 10px 0;
+    font-style: normal;
+    color: var(--vp-c-text-1);
+    position: relative;
+}
+
+.vp-doc blockquote::before {
+    content: '"';
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    font-size: 48px;
+    color: var(--vp-c-brand-1);
+    opacity: 0.3;
+    font-family: Georgia, serif;
+    line-height: 1;
+}
+
+.vp-doc blockquote p {
+    margin: 0;
+    padding-left: 0.5em;
+}
+
+/* ==================
+   代码
+================== */
+.vp-doc :not(pre)>code {
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 0.88em;
+    background: var(--vp-c-bg-soft);
+    color: var(--vp-c-brand-1);
+    border: 1px solid var(--vp-c-divider);
+    font-family: var(--vp-font-family-mono);
+}
+
+.vp-doc div[class*='language-'] {
+    border-radius: 12px;
+    margin: 1.8em 0;
+    font-size: 14px;
+    border: 1px solid var(--vp-c-divider);
+}
+
+/* ==================
+   列表
+================== */
+.vp-doc ul,
+.vp-doc ol {
+    padding-left: 1.6em;
+    line-height: 2;
+    margin: 1em 0;
+}
+
+.vp-doc ul li::marker {
+    color: var(--vp-c-brand-1);
+}
+
+.vp-doc ol li::marker {
+    color: var(--vp-c-brand-1);
+    font-weight: 600;
+}
+
+.vp-doc li+li {
+    margin-top: 0.4em;
+}
+
+/* ==================
+   表格
+================== */
+.vp-doc table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2em 0;
+    font-size: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--vp-c-divider);
+}
+
+.vp-doc th {
+    background: var(--vp-c-bg-soft);
+    font-weight: 600;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--vp-c-divider);
+}
+
+.vp-doc td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.vp-doc tr:last-child td {
+    border-bottom: none;
+}
+
+.vp-doc tr:nth-child(even) td {
+    background: var(--vp-c-bg-soft);
+}
+
+/* ==================
+   分割线
+================== */
+.vp-doc hr {
+    margin: 3em 0;
+    border: none;
+    text-align: center;
+}
+
+.vp-doc hr::after {
+    content: '· · ·';
+    color: var(--vp-c-text-3);
+    font-size: 18px;
+    letter-spacing: 0.5em;
+}
+
+/* ==================
+   链接
+================== */
+.vp-doc a {
+    color: var(--vp-c-brand-1);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.vp-doc a:hover {
+    border-bottom-color: var(--vp-c-brand-1);
+}
+
+.vp-doc a[href^="http"]::after {
+    content: ' ↗';
+    font-size: 12px;
+    opacity: 0.5;
+}
+
+/* ==================
+   NProgress 颜色
+================== */
 #nprogress .bar {
     background: var(--vp-c-brand-1) !important;
 }

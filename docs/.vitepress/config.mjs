@@ -1,17 +1,16 @@
 import { defineConfig } from 'vitepress'
-import viteImagemin from 'vite-plugin-imagemin'
+// import viteImagemin from 'vite-plugin-imagemin'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   vite: {
     plugins: [
-      viteImagemin({
-        gifsicle: { optimizationLevel: 7 },
-        pngquant: { quality: [0.8, 0.9] },
-        mozjpeg: { quality: 80 },
-        svgo: true,
-        // 删掉或注释掉 jpeg 相关，改用 mozjpeg
-      })
+      // viteImagemin({
+      //   gifsicle: { optimizationLevel: 7 },
+      //   pngquant: { quality: [0.8, 0.9] },
+      //   mozjpeg: { quality: 80 },
+      //   svgo: true,
+      // })
     ]
   },
   head: [
