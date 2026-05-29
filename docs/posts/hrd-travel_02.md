@@ -4,6 +4,7 @@ date: 2026-04-27
 outline: [2, 3]
 lastUpdated: true
 sidebar: false
+tags: ["旅", "北海道"]
 ---
 
 # 🎥 北海道一周の旅｜Day 2

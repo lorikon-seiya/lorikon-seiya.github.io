@@ -2,16 +2,19 @@
 import DefaultTheme from 'vitepress/theme'
 import { h } from 'vue'
 import './style.css'
-import DocMeta from './components/DocMeta.vue'
-import DocCopyright from './components/DocCopyright.vue'
-import HomeLayout from './components/HomeLayout.vue'
-import AboutLayout from './components/AboutLayout.vue'
-import PostList from './components/PostList.vue'
-import Comment from './components/Comment.vue'
-import ReadingProgress from './components/ReadingProgress.vue'
-import BackToTop from './components/BackToTop.vue'
-import ClickEffect from './components/ClickEffect.vue'
-import DocSlot from './components/DocSlot.vue'
+
+import HomeLayout from './components/layout/HomeLayout.vue'
+import AboutLayout from './components/layout/AboutLayout.vue'
+import DocMeta from './components/doc/DocMeta.vue'
+import DocCopyright from './components/doc/DocCopyright.vue'
+import DocSlot from './components/doc/DocSlot.vue'
+import PostList from './components/post/PostList.vue'
+import Comment from './components/ui/Comment.vue'
+import ReadingProgress from './components/ui/ReadingProgress.vue'
+import BackToTop from './components/ui/BackToTop.vue'
+import ClickEffect from './components/ui/ClickEffect.vue'
+import ImageZoom from './components/widget/ImageZoom.vue'
+
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
@@ -50,8 +53,8 @@ export default {
     extends: DefaultTheme,
     enhanceApp({ app, router }) {
         app.component('HomeLayout', HomeLayout)
-        app.component('AboutLayout', AboutLayout)   // 加这行
-        app.component('DocMeta', DocMeta)         // 注册全局组件
+        app.component('AboutLayout', AboutLayout)
+        app.component('DocMeta', DocMeta)
         app.component('DocCopyright', DocCopyright)
         app.component('PostList', PostList)
 
@@ -67,6 +70,7 @@ export default {
             // 'layout-bottom': () => h(BackToTop),
             'layout-bottom': () => h('div', [
                 h(BackToTop),
+                h(ImageZoom),
                 // h(ImageZoom),
                 // h(CopyCode),
                 // h(ClickEffect),

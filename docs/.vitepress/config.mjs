@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitepress'
-// import viteImagemin from 'vite-plugin-imagemin'
+import viteImagemin from 'vite-plugin-imagemin'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -12,6 +12,29 @@ export default defineConfig({
       //   svgo: true,
       // })
     ]
+  },
+  markdown: {
+    config(md) {
+      // 把连续的图片包成 gallery 容器
+      md.core.ruler.push('gallery', state => {
+        const tokens = state.tokens
+        for (let i = 0; i < tokens.length; i++) {
+          if (
+            tokens[i].type === 'inline' &&
+            tokens[i].children?.every(t =>
+              t.type === 'image' ||
+              t.type === 'softbreak' ||
+              t.content === ''
+            )
+          ) {
+            const images = tokens[i].children.filter(t => t.type === 'image')
+            if (images.length >= 2) {
+              tokens[i - 1].attrSet('class', 'photo-gallery')
+            }
+          }
+        }
+      })
+    }
   },
   head: [
     // ['link', { rel: 'icon', href: '/favicon.ico' }],
@@ -45,7 +68,7 @@ export default defineConfig({
       { text: 'Posts', link: '/posts/' },
       { text: 'About', link: '/about' }
     ],
-    // outline: false,
+    outline: false,
 
     sidebar: {
       '/posts/': [

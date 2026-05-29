@@ -74,10 +74,12 @@
 .vp-doc h2 {
     font-size: 1.4em;
     font-weight: 600;
-    margin-top: 2.5em;
-    margin-bottom: 0.8em;
-    padding-bottom: 0.4em;
-    border-bottom: 1px solid var(--vp-c-divider);
+    /* margin-top: 2.5em; */
+    /* margin-bottom: 0.8em; */
+    /* padding-bottom: 0.4em; */
+    border-top: 0;
+
+    /* border-bottom: 1px solid var(--vp-c-divider); */
 }
 
 .vp-doc h3 {
@@ -225,22 +227,6 @@
 }
 
 /* ==================
-   分割线
-================== */
-.vp-doc hr {
-    margin: 3em 0;
-    border: none;
-    text-align: center;
-}
-
-.vp-doc hr::after {
-    content: '· · ·';
-    color: var(--vp-c-text-3);
-    font-size: 18px;
-    letter-spacing: 0.5em;
-}
-
-/* ==================
    链接
 ================== */
 .vp-doc a {
@@ -258,6 +244,22 @@
     content: ' ↗';
     font-size: 12px;
     opacity: 0.5;
+}
+
+.vp-doc .photo-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+    margin: 2em 0;
+}
+
+.vp-doc .photo-gallery img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    margin: 0;
+    border-radius: 8px;
+    cursor: zoom-in;
 }
 
 /* ==================
@@ -294,7 +296,7 @@
 ================== */
 .VPFooter {
     background: var(--vp-c-bg-soft) !important;
-    border-top: 1px solid var(--vp-c-divider) !important;
+    /* border-top: 1px solid var(--vp-c-divider) !important; */
 }
 
 /* ==================
