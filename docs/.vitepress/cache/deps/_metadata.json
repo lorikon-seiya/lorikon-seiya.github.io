@@ -1,61 +1,55 @@
 {
-  "hash": "ab7f3ce2",
+  "hash": "e2fd2ef0",
   "configHash": "cb330637",
-  "lockfileHash": "fff74959",
-  "browserHash": "e5f81f93",
+  "lockfileHash": "15c77d75",
+  "browserHash": "6ea2d5a6",
   "optimized": {
     "vue": {
       "src": "../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "c4d978de",
+      "fileHash": "f6ea5db1",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../node_modules/.pnpm/@vue+devtools-api@8.1.2/node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "e1275965",
+      "fileHash": "627f2cf6",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../node_modules/.pnpm/@vueuse+core@14.3.0_vue@3.5.34/node_modules/@vueuse/core/dist/index.js",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "321b8f79",
+      "fileHash": "ed9d1084",
       "needsInterop": false
     },
     "vitepress > @vueuse/integrations/useFocusTrap": {
       "src": "../../../../node_modules/.pnpm/@vueuse+integrations@14.3.0_focus-trap@8.2.1_nprogress@0.2.0_vue@3.5.34/node_modules/@vueuse/integrations/dist/useFocusTrap.js",
       "file": "vitepress___@vueuse_integrations_useFocusTrap.js",
-      "fileHash": "0b7ef4fb",
+      "fileHash": "6f231939",
       "needsInterop": false
     },
     "vitepress > mark.js/src/vanilla.js": {
       "src": "../../../../node_modules/.pnpm/mark.js@8.11.1/node_modules/mark.js/src/vanilla.js",
       "file": "vitepress___mark__js_src_vanilla__js.js",
-      "fileHash": "5f2c3bd8",
+      "fileHash": "1059d2c2",
       "needsInterop": false
     },
     "vitepress > minisearch": {
       "src": "../../../../node_modules/.pnpm/minisearch@7.2.0/node_modules/minisearch/dist/es/index.js",
       "file": "vitepress___minisearch.js",
-      "fileHash": "10f4175a",
+      "fileHash": "efc84df5",
       "needsInterop": false
     },
     "nprogress": {
       "src": "../../../../node_modules/.pnpm/nprogress@0.2.0/node_modules/nprogress/nprogress.js",
       "file": "nprogress.js",
-      "fileHash": "4b4bb922",
+      "fileHash": "048d6ace",
       "needsInterop": true
     },
     "@giscus/vue": {
       "src": "../../../../node_modules/.pnpm/@giscus+vue@3.1.1_vue@3.5.34/node_modules/@giscus/vue/dist/index.js",
       "file": "@giscus_vue.js",
-      "fileHash": "a98845e1",
-      "needsInterop": false
-    },
-    "medium-zoom": {
-      "src": "../../../../node_modules/.pnpm/medium-zoom@1.1.0/node_modules/medium-zoom/dist/medium-zoom.esm.js",
-      "file": "medium-zoom.js",
-      "fileHash": "e8affa3c",
+      "fileHash": "c9a37f67",
       "needsInterop": false
     }
   },

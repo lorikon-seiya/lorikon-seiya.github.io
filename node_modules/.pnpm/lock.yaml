@@ -11,9 +11,6 @@ importers:
       '@giscus/vue':
         specifier: ^3.1.1
         version: 3.1.1(vue@3.5.34)
-      medium-zoom:
-        specifier: ^1.1.0
-        version: 1.1.0
       nprogress:
         specifier: ^0.2.0
         version: 0.2.0
@@ -1597,9 +1594,6 @@ packages:
 
   mdn-data@2.0.14:
     resolution: {integrity: sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==}
-
-  medium-zoom@1.1.0:
-    resolution: {integrity: sha512-ewyDsp7k4InCUp3jRmwHBRFGyjBimKps/AJLjRSox+2q/2H4p/PNpQf+pwONWlJiOudkBXtbdmVbFjqyybfTmQ==}
 
   meow@3.7.0:
     resolution: {integrity: sha512-TNdwZs0skRlpPpCUK25StC4VH+tP5GgeY1HQOOGP+lQ2xtdkN2VtT/5tiX9k3IWpkBPV9b3LsAWXn4GGi/PrSA==}
@@ -3931,8 +3925,6 @@ snapshots:
       vfile: 6.0.3
 
   mdn-data@2.0.14: {}
-
-  medium-zoom@1.1.0: {}
 
   meow@3.7.0:
     dependencies:
