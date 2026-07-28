@@ -1,169 +1,116 @@
 <script setup>
 import TypeWriter from '../ui/TypeWriter.vue'
-const texts = ['No man is an island', 'Entire of itself', 'Every man is a piece of the continent', 'A part of the main', 'If a clod be washed away by the sea', 'Europe is the less', 'As well as if a promontory were.', 'As well as if a manor of thy friend’s or of thine own were', 'Any man’s death diminishes me', 'Because I am involved in mankind', 'And therefore never send to know for whom the bell tolls', 'It tolls for thee',]
 
-const features = [
-    {
-        image: '/IMG_2635.jpeg',
-        title: '摄影',
-        details: '用镜头记录生活中的细节'
-    },
-    {
-        image: '/IMG_2718.jpeg',
-        title: '音乐',
-        details: '听见不同的声音和故事'
-    },
-    {
-        image: '/IMG_3463.jpeg',
-        title: '旅行',
-        details: '走过的地方都留下了什么'
-    },
-    {
-        image: '/IMG_6353.jpeg',
-        title: '旅行',
-        details: '走过的地方都留下了什么'
-    },
-    {
-        image: '/IMG_6321.jpeg',
-        title: '旅行',
-        details: '走过的地方都留下了什么'
-    },
-    {
-        image: '/IMG_4105.jpeg',
-        title: '旅行',
-        details: '走过的地方都留下了什么'
-    },
-    {
-        image: '/IMG_6356.jpeg',
-        title: '旅行',
-        details: '走过的地方都留下了什么'
-    },
-    {
-        image: '/IMG_6876.jpeg',
-        title: '旅行',
-        details: '走过的地方都留下了什么'
-    },
-    {
-        image: '/IMG_6890.jpeg',
-        title: '旅行',
-        details: '走过的地方都留下了什么'
-    },
+const texts = [
+    'No man is an island',
+    'Entire of itself',
+    'Every man is a piece of the continent',
+    'A part of the main',
+    'Any man\'s death diminishes me',
+    'Because I am involved in mankind',
+    'And therefore never send to know for whom the bell tolls',
+    'It tolls for thee',
+]
+
+const photos = [
+    '/IMG_2635.jpeg',
+    '/IMG_2718.jpeg',
+    '/IMG_3463.jpeg',
+    '/IMG_6353.jpeg',
+    '/IMG_6321.jpeg',
+    '/IMG_4105.jpeg',
+    '/IMG_6356.jpeg',
+    '/IMG_6876.jpeg',
+    '/IMG_6890.jpeg',
 ]
 </script>
 
 <template>
     <div class="home">
+
+        <!-- Hero -->
         <div class="hero">
-            <h3>
-                <TypeWriter :texts="texts" :type-speed="120" :pause-time="2000" />
-            </h3>
-            <p>"No Man Is An Island" by John Donne</p>
-            <!-- <a href="/posts/" class="btn">开始阅读</a> -->
+            <p class="typewriter">
+                <TypeWriter :texts="texts" :type-speed="80" :pause-time="2000" />
+            </p>
+            <p class="attribution">— John Donne, No Man Is An Island</p>
         </div>
 
-        <div class="features">
-            <a v-for="item in features" class="card">
-                <img :src="item.image" />
-                <!-- <div class="card-body">
-                    <h3>{{ item.title }}</h3>
-                    <p>{{ item.details }}</p>
-                </div> -->
-            </a>
+        <!-- 九宫格 -->
+        <div class="grid">
+            <div v-for="(src, i) in photos" :key="i" class="cell">
+                <img :src="src" alt="" />
+            </div>
         </div>
+
     </div>
 </template>
 
 <style scoped>
-.vp-doc img {
-    margin: 0;
-}
-
 .home {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 60px 24px;
+    padding: 0 24px 120px;
 }
 
+/* Hero */
 .hero {
-    text-align: center;
-    padding: 80px 0 60px;
+    padding: 120px 0 80px;
+    max-width: 640px;
 }
 
-.hero h1 {
-    font-size: 48px;
-    font-weight: 700;
-    margin-bottom: 16px;
+.typewriter {
+    font-size: clamp(18px, 2.5vw, 26px);
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    color: var(--vp-c-text-1);
+    margin: 0 0 14px;
+    min-height: 1.6em;
 }
 
-.hero p {
-    font-size: 18px;
-    color: var(--vp-c-text-2);
-    margin-bottom: 32px;
+.attribution {
+    font-size: 12px;
+    color: var(--vp-c-text-3);
+    margin: 0;
+    letter-spacing: 0.03em;
 }
 
-.btn {
-    display: inline-block;
-    padding: 10px 28px;
-    background: var(--vp-c-brand-1);
-    color: #fff;
-    border-radius: 24px;
-    font-size: 15px;
-    text-decoration: none;
-    transition: background 0.2s;
-}
-
-.btn:hover {
-    background: var(--vp-c-brand-2);
-}
-
-.features {
+/* 九宫格 */
+.grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    gap: 3px;
 }
 
-.card {
-    border-radius: 12px;
+.cell {
+    aspect-ratio: 1 / 1;
     overflow: hidden;
-    background: var(--vp-c-bg-soft);
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.2s;
 }
 
-.card:hover {
-    transform: translateY(-4px);
-}
-
-.card img {
-    /* width: 100%; */
-    /* height: 200px; */
+.cell img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    display: block;
+    margin: 0;
+    border-radius: 0;
+    transition: transform 0.5s ease, opacity 0.3s;
 }
 
-.card-body {
-    padding: 16px;
+.cell:hover img {
+    transform: scale(1.05);
+    opacity: 0.85;
 }
 
-.card-body h3 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 8px;
-}
-
-.card-body p {
-    font-size: 14px;
-    color: var(--vp-c-text-2);
-    line-height: 1.6;
-}
-
-@media (max-width: 768px) {
-    .features {
-        grid-template-columns: 1fr;
+/* 手机端 */
+@media (max-width: 600px) {
+    .hero {
+        padding: 80px 0 60px;
     }
 
-    .hero h1 {
-        font-size: 32px;
+    .grid {
+        gap: 2px;
     }
 }
 </style>

@@ -8,18 +8,24 @@ const { frontmatter } = useData()
 
 <template>
     <div v-if="frontmatter.date" class="doc-meta">
+
+        <!-- 日期、地点、阅读时间 -->
         <div class="meta-row">
-            <span>📅 {{ formatDate(frontmatter.date) }}</span>
-            <span v-if="frontmatter.location">📍 {{ frontmatter.location }}</span>
+            <span>{{ formatDate(frontmatter.date) }}</span>
+            <span v-if="frontmatter.location" class="dot">·</span>
+            <span v-if="frontmatter.location">{{ frontmatter.location }}</span>
+            <span class="dot">·</span>
             <ReadingTime />
         </div>
 
+        <!-- Tags -->
         <div v-if="frontmatter.tags?.length" class="tags">
 
-            <a v-for="tag in frontmatter.tags" :key="tag" class="tag">
+            <a v-for="tag in frontmatter.tags" :key="tag" :href="`/posts/?tag=${tag}`" class="tag">
                 {{ tag }}
             </a>
         </div>
+
     </div>
 </template>
 
@@ -28,15 +34,23 @@ const { frontmatter } = useData()
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-bottom: 24px;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--vp-c-divider);
 }
 
 .meta-row {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 16px;
-    font-size: 14px;
-    color: var(--vp-c-text-2);
+    gap: 6px;
+    font-size: 12px;
+    color: var(--vp-c-text-3);
+    letter-spacing: 0.02em;
+}
+
+.dot {
+    color: var(--vp-c-divider);
 }
 
 .tags {
@@ -46,18 +60,18 @@ const { frontmatter } = useData()
 }
 
 .tag {
-    padding: 2px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    background: var(--vp-c-bg-soft);
-    color: var(--vp-c-brand-1);
-    border: 1px solid var(--vp-c-brand-1);
+    font-size: 11px;
+    color: var(--vp-c-text-3);
     text-decoration: none;
-    transition: all 0.2s;
+    padding: 2px 8px;
+    border: 1px solid var(--vp-c-divider);
+    border-radius: 2px;
+    letter-spacing: 0.04em;
+    transition: all 0.15s;
 }
 
 .tag:hover {
-    background: var(--vp-c-brand-1);
-    color: #fff;
+    color: var(--vp-c-text-1);
+    border-color: var(--vp-c-text-1);
 }
 </style>

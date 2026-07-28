@@ -1,110 +1,187 @@
 <script setup>
+import { ref, computed, onMounted } from 'vue'
 import { data as posts } from '../../../../posts/posts.data.js'
 import { formatDate } from '../../utils/date.js'
+
+const activeTag = ref('')
+
+onMounted(() => {
+    const params = new URLSearchParams(window.location.search)
+    const tag = params.get('tag')
+    if (tag) activeTag.value = tag
+})
+
+const allTags = computed(() => {
+    const tags = new Set()
+    posts.forEach(post => {
+        post.frontmatter.tags?.forEach(tag => tags.add(tag))
+    })
+    return [...tags]
+})
+
+const filteredPosts = computed(() => {
+    if (!activeTag.value) return posts
+    return posts.filter(post =>
+        post.frontmatter.tags?.includes(activeTag.value)
+    )
+})
+
+function selectTag(tag) {
+    activeTag.value = activeTag.value === tag ? '' : tag
+}
 </script>
 
 <template>
     <div class="post-list">
-        <h1>Posts</h1>
 
-        <div v-if="posts.length === 0" class="empty">
-            Not have post ...
+        <!-- 标题 + 文章数 -->
+        <div class="list-header">
+            <h1>Posts</h1>
+            <span class="count">{{ filteredPosts.length }}</span>
         </div>
 
+        <!-- Tag 筛选 -->
+        <div v-if="allTags.length" class="tag-filter">
+            <button class="tag-btn" :class="{ active: activeTag === '' }" @click="activeTag = ''">
+                All
+            </button>
+            <button v-for="tag in allTags" :key="tag" class="tag-btn" :class="{ active: activeTag === tag }"
+                @click="selectTag(tag)">
+                {{ tag }}
+            </button>
+        </div>
 
-        <a v-for="post in posts" :key="post.url" :href="post.url" class="post-item">
-            <div class="post-meta">
-                <span v-if="post.frontmatter.date" class="date">
-                    {{ formatDate(post.frontmatter.date) }}
-                </span>
-                <span v-if="post.frontmatter.location" class="location">
-                    📍 {{ post.frontmatter.location }}
-                </span>
-            </div>
+        <!-- 空状态 -->
+        <div v-if="filteredPosts.length === 0" class="empty">
+            No posts found.
+        </div>
 
-            <h2 class="post-title">{{ post.frontmatter.title }}</h2>
+        <!-- 文章列表 -->
 
-            <div class="post-tags" v-if="post.frontmatter.tags?.length">
-                <span v-for="tag in post.frontmatter.tags" :key="tag" class="tag">
-                    {{ tag }}
-                </span>
-            </div>
+        <a v-for="post in filteredPosts" :key="post.url" :href="post.url" class="post-item">
+            <span class="post-date">
+                {{ post.frontmatter.date ? formatDate(post.frontmatter.date) : '' }}
+            </span>
+            <span class="post-title">{{ post.frontmatter.title }}</span>
+            <span v-if="post.frontmatter.location" class="post-location">
+                {{ post.frontmatter.location }}
+            </span>
         </a>
+
     </div>
 </template>
 
 <style scoped>
 .post-list {
-    max-width: 720px;
+    max-width: 680px;
     margin: 0 auto;
-    padding: 56px 24px;
+    padding: 80px 24px 120px;
 }
 
-.post-list h1 {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 40px;
-    letter-spacing: -0.5px;
-}
-
-.empty {
-    color: var(--vp-c-text-2);
-    text-align: center;
-    padding: 80px 0;
-    font-size: 15px;
-}
-
-.post-item {
-    display: block;
-    padding: 24px 28px;
-    margin-bottom: 16px;
-    border-radius: 12px;
-    background: var(--vp-c-bg-soft);
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.post-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-}
-
-.post-meta {
+/* 标题 */
+.list-header {
     display: flex;
+    align-items: baseline;
     gap: 12px;
-    font-size: 12px;
-    color: var(--vp-c-text-2);
-    margin-bottom: 10px;
+    margin-bottom: 40px;
 }
 
-.post-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 14px;
-    border: none;
-    padding: 0;
-    line-height: 1.4;
+.list-header h1 {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vp-c-text-3);
+    margin: 0;
+}
+
+.count {
+    font-size: 12px;
+    color: var(--vp-c-text-3);
+}
+
+/* Tag 筛选 */
+.tag-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 48px;
+}
+
+.tag-btn {
+    padding: 4px 12px;
+    border-radius: 2px;
+    font-size: 12px;
+    border: 1px solid var(--vp-c-divider);
+    background: transparent;
+    color: var(--vp-c-text-2);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.02em;
+}
+
+.tag-btn:hover,
+.tag-btn.active {
+    border-color: var(--vp-c-text-1);
     color: var(--vp-c-text-1);
 }
 
-.post-item:hover .post-title {
-    color: var(--vp-c-brand-1);
-    transition: color 0.2s;
+/* 空状态 */
+.empty {
+    font-size: 14px;
+    color: var(--vp-c-text-3);
+    padding: 60px 0;
 }
 
-.post-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
+/* 文章列表 */
+.post-item {
+    display: grid;
+    grid-template-columns: 140px 1fr auto;
+    align-items: baseline;
+    gap: 24px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--vp-c-divider);
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.15s;
 }
 
-.tag {
-    padding: 2px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    background: var(--vp-c-bg);
-    color: var(--vp-c-brand-1);
-    border: 1px solid var(--vp-c-brand-1);
+.post-item:first-of-type {
+    border-top: 1px solid var(--vp-c-divider);
+}
+
+.post-item:hover {
+    opacity: 0.6;
+}
+
+.post-date {
+    font-size: 12px;
+    color: var(--vp-c-text-3);
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+
+.post-title {
+    font-size: 15px;
+    color: var(--vp-c-text-1);
+    line-height: 1.5;
+}
+
+.post-location {
+    font-size: 12px;
+    color: var(--vp-c-text-3);
+    white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    .post-item {
+        grid-template-columns: 1fr;
+        gap: 4px;
+        padding: 16px 0;
+    }
+
+    .post-location {
+        display: none;
+    }
 }
 </style>

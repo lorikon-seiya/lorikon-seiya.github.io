@@ -1,10 +1,29 @@
 import { defineConfig } from 'vitepress'
-import viteImagemin from 'vite-plugin-imagemin'
+// import viteImagemin from 'vite-plugin-imagemin'
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   vite: {
     plugins: [
+      ViteImageOptimizer({
+        jpg: {
+          quality: 80,
+        },
+        jpeg: {
+          quality: 80,
+        },
+        png: {
+          quality: 80,
+        },
+        webp: {
+          lossless: false,
+          quality: 80,
+        },
+        svg: {
+          multipass: true,
+        },
+      }),
       // viteImagemin({
       //   gifsicle: { optimizationLevel: 7 },
       //   pngquant: { quality: [0.8, 0.9] },
@@ -50,7 +69,9 @@ export default defineConfig({
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-JFB80PQ3PC');`
-    ]
+    ],
+    // ['link', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/beercss@3/dist/cdn/beer.min.css' }],
+    // ['script', { src: 'https://cdn.jsdelivr.net/npm/beercss@3/dist/cdn/beer.min.js', type: 'module' }],
   ],
   markdown: {
     image: {

@@ -71,7 +71,6 @@ export default {
             'layout-bottom': () => h('div', [
                 h(BackToTop),
                 h(ImageZoom),
-                // h(ImageZoom),
                 // h(CopyCode),
                 // h(ClickEffect),
             ]),
