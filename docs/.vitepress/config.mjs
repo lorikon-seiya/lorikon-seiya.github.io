@@ -1,29 +1,46 @@
 import { defineConfig } from 'vitepress'
 // import viteImagemin from 'vite-plugin-imagemin'
-import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
+// import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
+
+import { readdirSync, readFileSync } from 'fs'
+import { resolve, dirname } from 'path'
+import { fileURLToPath } from 'url'
+import matter from 'gray-matter'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+function getSidebar() {
+  const postsDir = resolve(__dirname, '../posts')
+
+  const files = readdirSync(postsDir)
+    .filter(f => f.endsWith('.md') && f !== 'index.md')
+
+  const posts = files
+    .map(f => {
+      const content = readFileSync(resolve(postsDir, f), 'utf-8')
+      const { data } = matter(content)
+      return {
+        text: data.title || f.replace('.md', ''),
+        link: `/posts/${f.replace('.md', '')}`,
+        date: data.date,
+      }
+    })
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+
+  return {
+    '/posts/': [
+      {
+        text: 'Posts',
+        items: posts
+      }
+    ]
+  }
+}
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   vite: {
     plugins: [
-      ViteImageOptimizer({
-        jpg: {
-          quality: 80,
-        },
-        jpeg: {
-          quality: 80,
-        },
-        png: {
-          quality: 80,
-        },
-        webp: {
-          lossless: false,
-          quality: 80,
-        },
-        svg: {
-          multipass: true,
-        },
-      }),
       // viteImagemin({
       //   gifsicle: { optimizationLevel: 7 },
       //   pngquant: { quality: [0.8, 0.9] },
@@ -91,18 +108,7 @@ export default defineConfig({
     ],
     outline: false,
 
-    sidebar: {
-      '/posts/': [
-        {
-          text: 'Posts',
-          items: [
-            { text: 'hello-world', link: '/posts/hello-world' },
-            { text: '北海道旅', link: '/posts/hkd-travel' },
-            { text: '外国人の言語学習について', link: '/posts/nihonngo-study' },
-          ]
-        }
-      ]
-    },
+    sidebar: await getSidebar(),
 
     socialLinks: [
       { icon: 'instagram', link: 'https://www.instagram.com/' }
