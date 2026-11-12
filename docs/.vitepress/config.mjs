@@ -50,6 +50,9 @@ export default defineConfig({
     ]
   },
   markdown: {
+    image: {
+      lazyLoading: true   // 开启图片懒加载
+    },
     config(md) {
       // 把连续的图片包成 gallery 容器
       md.core.ruler.push('gallery', state => {
@@ -104,7 +107,8 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Posts', link: '/posts/' },
-      { text: 'About', link: '/about' }
+      { text: 'About', link: '/about' },
+      // { text: 'Resume', link: '/resume' },
     ],
     outline: false,
 

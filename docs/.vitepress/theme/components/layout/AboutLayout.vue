@@ -1,259 +1,115 @@
-<script setup>
-const links = [
-    { text: 'GitHub', url: 'https://github.com/你的用户名' },
-    { text: 'X', url: 'https://twitter.com/你的用户名' },
-]
-
-const skills = ['エッチ', 'Laravel', '洗車', '掃除機', 'オイル交換']
-</script>
-
+<!-- .vitepress/theme/components/AboutMe.vue -->
 <template>
-    <div class="about">
-
-        <!-- Hero -->
-        <div class="hero">
-            <div class="hero-left">
-                <img src="/IMG_0939.JPG" alt="avatar" class="avatar" />
-                <div class="info">
-                    <h1>CCC</h1>
-                    <p>日本で働いているチャイニーズ</p>
-                    <div class="links">
-
-                        <a v-for="link in links" :key="link.text" :href="link.url" class="link" target="_blank">
-                            {{ link.text }} ↗
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="hero-right">
-                <div class="img-wrap">
-                    <img src="/IMG_6821.JPG" alt="" class="side-img" />
-                    <div class="fade-bottom" />
-                    <div class="fade-left" />
-                </div>
-            </div>
-        </div>
-
-        <!-- 内容 -->
-        <div class="content">
-
-            <div class="section">
-                <h2>About</h2>
-                <p>
-                    My name is Chin.
-                    Chin to moushimasu.
-                    よろしくお願いします。
-                </p>
-            </div>
-
-            <div class="section">
-                <h2>Skill</h2>
-                <div class="chips">
-                    <span v-for="skill in skills" :key="skill" class="chip">
-                        {{ skill }}
-                    </span>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2>Now</h2>
-                <ul>
-                    <li>日本一周</li>
-                    <li>世界一周</li>
-                    <li>SwiftUI</li>
-                </ul>
-            </div>
-
-        </div>
+  <div class="about-simple">
+    <!-- 头部头像与基本信息 -->
+    <div class="header">
+      <img class="avatar" src="/IMG_0939.JPG" alt="Avatar" />
+      <div class="meta">
+        <h1 class="name">CCC</h1>
+        <p class="sub">外人整備士</p>
+      </div>
     </div>
+
+    <hr class="divider" />
+
+    <!-- 极简正文 -->
+    <div class="body">
+      <p>
+        サウナ、温泉、自然。ダイハツ車乗っています。
+      </p>
+      <p>
+        日本一周を制覇する（千葉県以外）男です。道の駅で車中泊するのが大好きです。
+      </p>
+      <p>
+        SwiftUIでアプリを開発したいです。現在勉強中。
+      </p>
+
+      <h3>🛠 Skill</h3>
+      <p class="tech-tags">
+        <code>Php</code>
+        <code>Laravel</code>
+        <code>SwiftUI</code>
+        <code>オイル交換</code>
+        <code>洗車</code>
+      </p>
+
+      <h3>📬 Find Me</h3>
+      <ul class="contact-list">
+        <!-- <li>GitHub：<a href="https://github.com" target="_blank">@yourname</a></li>
+        <li>邮箱：<a href="mailto:alex@example.com">alex@example.com</a></li> -->
+        <li>Resume<a href="/resume" class="resume-link"> 👉 Click to Read My Resume</a></li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-.about {
-    padding-bottom: 120px;
+.about-simple {
+  max-width: 680px;
+  margin: 30px auto;
+  padding: 0 16px;
 }
 
-/* Hero */
-.hero {
-    display: flex;
-    align-items: flex-start;
-    gap: 48px;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 80px 24px 60px;
-}
-
-.hero-left {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+.header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
 }
 
 .avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    object-fit: cover;
-    display: block;
-    margin: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 1px solid var(--vp-c-divider);
 }
 
-.info h1 {
-    font-size: 24px;
-    font-weight: 600;
-    margin: 0 0 6px;
-    letter-spacing: -0.02em;
+.name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  border: none;
+  color: var(--vp-c-text-1);
 }
 
-.info p {
-    font-size: 14px;
-    color: var(--vp-c-text-2);
-    margin: 0 0 20px;
+.sub {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+  color: var(--vp-c-text-2);
 }
 
-.links {
-    display: flex;
-    gap: 20px;
+.divider {
+  border: none;
+  border-top: 1px solid var(--vp-c-divider);
+  margin: 20px 0 28px;
 }
 
-.link {
-    font-size: 13px;
-    color: var(--vp-c-text-2);
-    text-decoration: none;
-    transition: color 0.15s;
+.body {
+  line-height: 1.8;
+  color: var(--vp-c-text-1);
 }
 
-.link:hover {
-    color: var(--vp-c-text-1);
+.body h3 {
+  font-size: 1.1rem;
+  margin: 24px 0 12px;
+  border: none;
 }
 
-/* 右侧图片 */
-.hero-right {
-    flex-shrink: 0;
-    width: 240px;
+.tech-tags code {
+  margin-right: 8px;
+  padding: 3px 6px;
+  font-size: 0.85em;
+  background-color: var(--vp-c-bg-mute);
+  border-radius: 4px;
 }
 
-.img-wrap {
-    position: relative;
-    width: 100%;
-    height: 340px;
-    overflow: hidden;
-    border-radius: 2px;
+.contact-list {
+  padding-left: 20px;
+  line-height: 2;
 }
 
-.side-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    margin: 0;
-    border-radius: 0;
-    filter: saturate(0.85) brightness(0.95);
-    transition: filter 0.3s;
-}
-
-.img-wrap:hover .side-img {
-    filter: saturate(1) brightness(1);
-}
-
-.fade-bottom {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100px;
-    background: linear-gradient(to bottom, transparent, var(--vp-c-bg));
-    pointer-events: none;
-}
-
-.fade-left {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 60px;
-    background: linear-gradient(to right, var(--vp-c-bg), transparent);
-    pointer-events: none;
-}
-
-/* 内容区 */
-.content {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 24px;
-}
-
-.section {
-    margin-bottom: 56px;
-}
-
-.section h2 {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--vp-c-text-3);
-    margin: 0 0 20px;
-    padding: 0;
-    border: none;
-}
-
-.section p {
-    font-size: 15px;
-    line-height: 1.8;
-    color: var(--vp-c-text-1);
-    margin: 0;
-}
-
-.section ul {
-    padding: 0;
-    list-style: none;
-    margin: 0;
-}
-
-.section ul li {
-    font-size: 15px;
-    line-height: 2;
-    color: var(--vp-c-text-1);
-}
-
-.section ul li::before {
-    content: '—  ';
-    color: var(--vp-c-text-3);
-}
-
-/* Chips */
-.chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.chip {
-    font-size: 12px;
-    color: var(--vp-c-text-2);
-    padding: 3px 10px;
-    border: 1px solid var(--vp-c-divider);
-    border-radius: 2px;
-    letter-spacing: 0.02em;
-}
-
-/* 手机端 */
-@media (max-width: 768px) {
-    .hero {
-        flex-direction: column-reverse;
-        padding: 60px 24px 40px;
-        gap: 32px;
-    }
-
-    .hero-right {
-        width: 100%;
-    }
-
-    .img-wrap {
-        height: 220px;
-    }
+.resume-link {
+  font-weight: 600;
+  color: var(--vp-c-brand-1);
 }
 </style>

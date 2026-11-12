@@ -14,6 +14,8 @@ import ReadingProgress from './components/ui/ReadingProgress.vue'
 import BackToTop from './components/ui/BackToTop.vue'
 import ClickEffect from './components/ui/ClickEffect.vue'
 import ImageZoom from './components/widget/ImageZoom.vue'
+import ResumeSwiper from './components/layout/ResumeSwiper.vue'
+
 
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -57,6 +59,7 @@ export default {
         app.component('DocMeta', DocMeta)
         app.component('DocCopyright', DocCopyright)
         app.component('PostList', PostList)
+        app.component('ResumeSwiper', ResumeSwiper)
 
         // router：路由钩子
         if (typeof window !== 'undefined') {
