@@ -93,11 +93,6 @@ export default defineConfig({
     // ['link', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/beercss@3/dist/cdn/beer.min.css' }],
     // ['script', { src: 'https://cdn.jsdelivr.net/npm/beercss@3/dist/cdn/beer.min.js', type: 'module' }],
   ],
-  markdown: {
-    image: {
-      lazyLoading: true   // 开启图片懒加载
-    }
-  },
   base: '/',   // 必须和 GitHub 仓库名一致
   title: "ccc",
   description: "blog",
