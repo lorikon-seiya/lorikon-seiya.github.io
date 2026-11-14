@@ -1,104 +1,115 @@
 <script setup>
-import { onMounted, onUnmounted, watch } from 'vue'
+import { onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useRoute } from 'vitepress'
+import '@fancyapps/ui/dist/fancybox/fancybox.css'
 
 const route = useRoute()
+let FancyboxInstance = null
 
-let overlay = null
-let currentImg = null
+async function initFancybox() {
+    if (typeof window === 'undefined') return
 
-function createOverlay() {
-    overlay = document.createElement('div')
-    overlay.style.cssText = `
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.85);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: zoom-out;
-    padding: 24px;
-    box-sizing: border-box;
-  `
-
-    const img = document.createElement('img')
-    img.style.cssText = `
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    border-radius: 8px;
-    pointer-events: none;
-    user-select: none;
-  `
-
-    overlay.appendChild(img)
-    document.body.appendChild(overlay)
-
-    // 点击关闭
-    overlay.addEventListener('click', close)
-
-    // 滑动关闭（移动端）
-    let startY = 0
-    overlay.addEventListener('touchstart', e => {
-        startY = e.touches[0].clientY
-    }, { passive: true })
-
-    overlay.addEventListener('touchend', e => {
-        const endY = e.changedTouches[0].clientY
-        if (Math.abs(endY - startY) > 50) close()
-    }, { passive: true })
-
-    return img
-}
-
-function open(src) {
-    if (!overlay) {
-        currentImg = createOverlay()
+    if (!FancyboxInstance) {
+        const module = await import('@fancyapps/ui')
+        FancyboxInstance = module.Fancybox
     }
-    currentImg.src = src
-    overlay.style.display = 'flex'
-    document.body.style.overflow = 'hidden'
-}
 
-function close() {
-    if (overlay) {
-        overlay.style.display = 'none'
-        document.body.style.overflow = ''
-    }
-}
+    nextTick(() => {
+        try {
+            FancyboxInstance.unbind('.vp-doc img')
+            FancyboxInstance.unbind('[data-fancybox="home-gallery"]')
+        } catch (e) {
+            // ignore
+        }
 
-function onKeyDown(e) {
-    if (e.key === 'Escape') close()
-}
+        // 1. 为文章正文 (.vp-doc) 中所有非特殊图片自动赋加画廊属性
+        const docImgs = document.querySelectorAll('.vp-doc img')
+        docImgs.forEach((img) => {
+            img.style.cursor = 'zoom-in'
+            if (!img.getAttribute('data-fancybox')) {
+                img.setAttribute('data-fancybox', 'post-gallery')
+            }
+            if (!img.getAttribute('data-src')) {
+                img.setAttribute('data-src', img.currentSrc || img.src)
+            }
+            if (!img.getAttribute('data-caption') && img.alt) {
+                img.setAttribute('data-caption', img.alt)
+            }
+        })
 
-function initZoom() {
-    const imgs = document.querySelectorAll('.vp-doc img')
-    imgs.forEach(img => {
-        img.style.cursor = 'zoom-in'
-        img.removeEventListener('click', onImgClick)
-        img.addEventListener('click', onImgClick)
+        // 2. 绑定文章正文画廊
+        FancyboxInstance.bind('.vp-doc img[data-fancybox="post-gallery"]', {
+            groupAll: true,
+            Thumbs: {
+                autoStart: true,
+            },
+            Toolbar: {
+                display: {
+                    left: ['infobar'],
+                    middle: ['zoomIn', 'zoomOut', 'toggle1to1', 'rotateCW'],
+                    right: ['slideshow', 'thumbs', 'fullscreen', 'close'],
+                },
+            },
+        })
+
+        // 3. 绑定首页九宫格画廊
+        FancyboxInstance.bind('[data-fancybox="home-gallery"]', {
+            groupAll: true,
+            Thumbs: {
+                autoStart: true,
+            },
+            Toolbar: {
+                display: {
+                    left: ['infobar'],
+                    middle: ['zoomIn', 'zoomOut', 'toggle1to1'],
+                    right: ['thumbs', 'fullscreen', 'close'],
+                },
+            },
+        })
     })
 }
 
-function onImgClick(e) {
-    open(e.currentTarget.src)
-}
-
 onMounted(() => {
-    initZoom()
-    window.addEventListener('keydown', onKeyDown)
+    initFancybox()
 })
 
 watch(() => route.path, () => {
-    setTimeout(initZoom, 300)
+    setTimeout(initFancybox, 300)
 })
 
 onUnmounted(() => {
-    window.removeEventListener('keydown', onKeyDown)
-    overlay?.remove()
-    overlay = null
+    try {
+        FancyboxInstance?.destroy()
+    } catch (e) {
+        // ignore
+    }
 })
 </script>
 
 <template></template>
+
+<style>
+/* Fancybox 视觉微调，完美契合暗黑与极简风 */
+.fancybox__backdrop {
+    background: rgba(10, 10, 12, 0.92) !important;
+    backdrop-filter: blur(12px);
+}
+
+.fancybox__toolbar {
+    --f-button-color: #cbd5e1;
+    --f-button-hover-color: #ffffff;
+    --f-button-bg: rgba(255, 255, 255, 0.08);
+    --f-button-hover-bg: rgba(255, 255, 255, 0.16);
+    padding: 12px 16px;
+}
+
+.fancybox__caption {
+    font-size: 13px;
+    color: #e2e8f0;
+    letter-spacing: 0.02em;
+    padding: 12px 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+</style>

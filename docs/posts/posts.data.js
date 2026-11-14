@@ -1,11 +1,1 @@
-import { createContentLoader } from 'vitepress'
-
-export default createContentLoader('posts/*.md', {
-    transform(rawData) {
-        return rawData
-            .filter(page => !page.url.endsWith('/posts/'))
-            .sort((a, b) => {
-                return new Date(b.frontmatter.date) - new Date(a.frontmatter.date)
-            })
-    }
-})
+export { default } from '../.vitepress/theme/data/posts.data.js'

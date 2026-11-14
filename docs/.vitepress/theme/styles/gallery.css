@@ -1,0 +1,33 @@
+/* Photo Gallery styles for continuous markdown images */
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin: 28px 0;
+}
+
+.photo-gallery img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 0 !important;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.photo-gallery img:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+@media (max-width: 640px) {
+  .photo-gallery {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .photo-gallery img {
+    height: 200px;
+  }
+}

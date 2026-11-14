@@ -1,17 +1,7 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { useScrollProgress } from '../../composables/useScroll.js'
 
-const progress = ref(0)
-
-function onScroll() {
-    const doc = document.documentElement
-    const scrolled = doc.scrollTop
-    const total = doc.scrollHeight - doc.clientHeight
-    progress.value = total > 0 ? (scrolled / total) * 100 : 0
-}
-
-onMounted(() => window.addEventListener('scroll', onScroll))
-onUnmounted(() => window.removeEventListener('scroll', onScroll))
+const { progress } = useScrollProgress()
 </script>
 
 <template>

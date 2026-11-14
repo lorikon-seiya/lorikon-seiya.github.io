@@ -1,6 +1,6 @@
 import "./chunk-BUSYA2B4.js";
 
-// node_modules/reveal.js/dist/reveal.mjs
+// node_modules/.pnpm/reveal.js@6.0.2/node_modules/reveal.js/dist/reveal.mjs
 var e = (e2, t2) => {
   for (let n2 in t2) e2[n2] = t2[n2];
   return e2;

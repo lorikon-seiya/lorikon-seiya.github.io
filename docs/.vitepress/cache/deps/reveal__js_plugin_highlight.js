@@ -1,6 +1,6 @@
 import "./chunk-BUSYA2B4.js";
 
-// node_modules/reveal.js/dist/plugin/highlight.mjs
+// node_modules/.pnpm/reveal.js@6.0.2/node_modules/reveal.js/dist/plugin/highlight.mjs
 var e = Object.create;
 var t = Object.defineProperty;
 var n = Object.getOwnPropertyDescriptor;

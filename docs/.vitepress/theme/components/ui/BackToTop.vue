@@ -1,23 +1,12 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { useBackToTop } from '../../composables/useScroll.js'
 
-const visible = ref(false)
-
-function onScroll() {
-    visible.value = window.scrollY > 300
-}
-
-function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-onMounted(() => window.addEventListener('scroll', onScroll))
-onUnmounted(() => window.removeEventListener('scroll', onScroll))
+const { visible, scrollToTop } = useBackToTop(300)
 </script>
 
 <template>
     <Transition name="fade">
-        <button v-if="visible" class="back-to-top" @click="scrollToTop">
+        <button v-if="visible" class="back-to-top" @click="scrollToTop" aria-label="Back to top">
             ↑
         </button>
     </Transition>
