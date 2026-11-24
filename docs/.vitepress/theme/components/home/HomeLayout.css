@@ -1,5 +1,11 @@
 .home {
-    max-width: 1200px;
+    max-width: var(--blog-wide-width, 1120px);
     margin: 0 auto;
-    padding: 0 24px 120px;
+    padding: 0 24px 80px;
+}
+
+@media (max-width: 640px) {
+    .home {
+        padding: 0 18px 60px;
+    }
 }

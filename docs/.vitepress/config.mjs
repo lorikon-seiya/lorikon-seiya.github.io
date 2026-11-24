@@ -3,7 +3,7 @@ import { readdirSync, readFileSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import matter from 'gray-matter'
-import { createRssFile } from './rss.mjs'
+import { createRssFile, generateFeed } from './rss.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -46,6 +46,24 @@ export default defineConfig({
   },
   vite: {
     plugins: [
+      {
+        name: 'rss-dev-server',
+        configureServer(server) {
+          server.middlewares.use(async (req, res, next) => {
+            if (req.url === '/feed.rss' || req.url === '/atom.xml') {
+              try {
+                const { rss, atom } = await generateFeed()
+                res.setHeader('Content-Type', 'application/xml; charset=utf-8')
+                res.end(req.url === '/feed.rss' ? rss : atom)
+                return
+              } catch (err) {
+                console.error('[RSS Dev Middleware Error]:', err)
+              }
+            }
+            next()
+          })
+        }
+      }
     ]
   },
   markdown: {
@@ -102,7 +120,7 @@ export default defineConfig({
     sidebar: await getSidebar(),
 
     socialLinks: [
-      { icon: 'instagram', link: 'https://www.instagram.com/' },
+      { icon: 'instagram', link: 'https://www.instagram.com/caicaicaizi2' },
       {
         icon: {
           svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19 7.38 20 6.18 20C5 20 4 19 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27zm0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93z"/></svg>'
@@ -111,11 +129,6 @@ export default defineConfig({
         ariaLabel: 'RSS Feed'
       }
     ],
-
-    footer: {
-      message: 'Use VitePress Build',
-      copyright: 'Copyright © 2026 ccc'
-    },
 
     search: {
       provider: 'local'

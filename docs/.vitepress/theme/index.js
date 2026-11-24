@@ -11,6 +11,8 @@ import PostList from './components/post/PostList.vue'
 import ReadingProgress from './components/ui/ReadingProgress.vue'
 import BackToTop from './components/ui/BackToTop.vue'
 import ImageZoom from './components/widget/ImageZoom.vue'
+import MusicPlayer from './components/widget/MusicPlayer.vue'
+import CustomFooter from './components/layout/CustomFooter.vue'
 import ResumeSwiper from './components/layout/ResumeSwiper.vue'
 import RevealResume from './components/resume/RevealResume.vue'
 
@@ -47,8 +49,10 @@ export default {
         return h(DefaultTheme.Layout, null, {
             'layout-top': () => h(ReadingProgress),
             'layout-bottom': () => h('div', [
+                h(CustomFooter),
                 h(BackToTop),
                 h(ImageZoom),
+                h(MusicPlayer),
             ]),
             'doc-before': () => h(DocMeta),           // 文章顶部：发布日期、阅读时间、标签
             'doc-after': () => h(DocSlot),            // 文章底部：版权、评论

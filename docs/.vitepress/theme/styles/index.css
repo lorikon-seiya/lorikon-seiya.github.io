@@ -1,9 +1,45 @@
 @import './typography.css';
 @import './gallery.css';
 
-/* Global variables and overrides */
+/* ============================================================
+   统一设计规范系统 (Design System Tokens)
+   ============================================================ */
 :root {
+  /* 品牌色阶 */
   --vp-c-brand-1: #3b82f6;
   --vp-c-brand-2: #2563eb;
   --vp-c-brand-3: #1d4ed8;
+
+  /* 统一页面容器宽度体系 */
+  --blog-narrow-width: 720px;  /* 沉浸式阅读：文章、Posts列表、About */
+  --blog-wide-width: 1120px;   /* 宽幅视觉：首页摄影九宫格、Footer */
+
+  /* 统一节奏间距体系 */
+  --blog-page-pt: 64px;        /* 内页顶部呼吸间距 */
+  --blog-page-pb: 96px;        /* 内页底部呼吸间距 */
+}
+
+/* 文本选中高亮颜色统一 */
+::selection {
+  background-color: rgba(59, 130, 246, 0.25);
+  color: var(--vp-c-text-1);
+}
+
+/* 极简细窄滚动条美化 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vp-c-divider);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vp-c-text-3);
 }

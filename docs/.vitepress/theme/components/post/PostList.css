@@ -1,55 +1,82 @@
 .post-list {
-    max-width: 680px;
+    max-width: var(--blog-narrow-width, 720px);
     margin: 0 auto;
-    padding: 80px 24px 120px;
+    padding: var(--blog-page-pt, 64px) 24px var(--blog-page-pb, 96px);
+    box-sizing: border-box;
 }
 
-/* 标题 */
+/* 页面头部 */
 .list-header {
     display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin-bottom: 40px;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 32px;
 }
 
-.list-header h1 {
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
+.header-main {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--vp-c-text-3);
-    margin: 0;
+    color: var(--vp-c-brand-1);
 }
 
-.count {
+.page-title {
+    font-size: clamp(24px, 3.5vw, 32px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--vp-c-text-1);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.count-badge {
     font-size: 12px;
     color: var(--vp-c-text-3);
+    background: var(--vp-c-bg-soft);
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--vp-c-divider);
+    font-family: var(--vp-font-family-mono);
 }
 
-/* Tag 筛选 */
+/* Tag 胶囊筛选栏 */
 .tag-filter {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 48px;
+    margin-bottom: 36px;
 }
 
 .tag-btn {
-    padding: 4px 12px;
-    border-radius: 2px;
+    padding: 4px 14px;
+    border-radius: 16px;
     font-size: 12px;
     border: 1px solid var(--vp-c-divider);
     background: transparent;
     color: var(--vp-c-text-2);
     cursor: pointer;
-    transition: all 0.15s;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     letter-spacing: 0.02em;
 }
 
-.tag-btn:hover,
+.tag-btn:hover {
+    border-color: var(--vp-c-brand-1);
+    color: var(--vp-c-brand-1);
+    background: rgba(59, 130, 246, 0.05);
+}
+
 .tag-btn.active {
-    border-color: var(--vp-c-text-1);
-    color: var(--vp-c-text-1);
+    background: var(--vp-c-brand-1);
+    border-color: var(--vp-c-brand-1);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
 /* 空状态 */
@@ -57,19 +84,27 @@
     font-size: 14px;
     color: var(--vp-c-text-3);
     padding: 60px 0;
+    text-align: center;
 }
 
-/* 文章列表 */
+/* 文章列表容器 */
+.post-items {
+    display: flex;
+    flex-direction: column;
+}
+
 .post-item {
-    display: grid;
-    grid-template-columns: 140px 1fr auto;
-    align-items: baseline;
-    gap: 24px;
-    padding: 18px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px 14px;
+    margin: 0 -14px;
+    border-radius: 10px;
     border-bottom: 1px solid var(--vp-c-divider);
     text-decoration: none;
     color: inherit;
-    transition: opacity 0.15s;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .post-item:first-of-type {
@@ -77,36 +112,75 @@
 }
 
 .post-item:hover {
-    opacity: 0.6;
+    background-color: var(--vp-c-bg-soft);
+    border-color: transparent;
+    transform: translateX(4px);
 }
 
-.post-date {
-    font-size: 12px;
-    color: var(--vp-c-text-3);
-    white-space: nowrap;
-    letter-spacing: 0.02em;
+.post-main {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow: hidden;
 }
 
 .post-title {
-    font-size: 15px;
+    font-size: 16px;
+    font-weight: 500;
     color: var(--vp-c-text-1);
-    line-height: 1.5;
+    line-height: 1.45;
+    transition: color 0.15s;
+}
+
+.post-item:hover .post-title {
+    color: var(--vp-c-brand-1);
+}
+
+.post-meta-sub {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--vp-c-text-3);
+    letter-spacing: 0.02em;
+}
+
+.post-date {
+    font-family: var(--vp-font-family-mono);
+}
+
+.dot {
+    color: var(--vp-c-divider);
 }
 
 .post-location {
-    font-size: 12px;
-    color: var(--vp-c-text-3);
-    white-space: nowrap;
+    font-size: 11px;
+    color: var(--vp-c-text-2);
 }
 
-@media (max-width: 600px) {
-    .post-item {
-        grid-template-columns: 1fr;
-        gap: 4px;
-        padding: 16px 0;
+.arrow {
+    color: var(--vp-c-text-3);
+    font-size: 16px;
+    transition: transform 0.2s, color 0.2s;
+    flex-shrink: 0;
+}
+
+.post-item:hover .arrow {
+    transform: translateX(4px);
+    color: var(--vp-c-brand-1);
+}
+
+@media (max-width: 640px) {
+    .post-list {
+        padding: 40px 18px 60px;
     }
 
-    .post-location {
+    .post-item {
+        padding: 14px 8px;
+        margin: 0 -8px;
+    }
+
+    .arrow {
         display: none;
     }
 }

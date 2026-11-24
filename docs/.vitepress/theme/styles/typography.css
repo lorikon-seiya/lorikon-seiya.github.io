@@ -4,17 +4,57 @@
   --vp-font-family-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace;
 }
 
-/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Responsive container refinements */
-.VPDoc:not(.has-sidebar) .content {
-  max-width: 780px !important;
+/* 统一文章正文阅读宽度为 720px */
+.VPDoc .content-container {
+  max-width: var(--blog-narrow-width, 720px) !important;
 }
 
-/* Subtle link hover transitions */
+/* 文章正文段落与排版舒适度优化 */
+.vp-doc p {
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+}
+
+.vp-doc h1 {
+  font-size: clamp(24px, 3.5vw, 32px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  margin-bottom: 20px;
+}
+
+.vp-doc h2 {
+  font-size: clamp(19px, 2.5vw, 22px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-top: 48px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--vp-c-divider);
+  padding-bottom: 10px;
+}
+
+.vp-doc h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+
+/* 极简引用块风格 */
+.vp-doc blockquote {
+  border-left: 3px solid var(--vp-c-brand-1);
+  background: var(--vp-c-bg-soft);
+  padding: 12px 18px;
+  border-radius: 0 8px 8px 0;
+  font-style: normal;
+  margin: 20px 0;
+}
+
+/* 链接平滑过渡 */
 a {
-  transition: color 0.2s ease, opacity 0.2s ease;
+  transition: color 0.15s ease, opacity 0.15s ease;
 }

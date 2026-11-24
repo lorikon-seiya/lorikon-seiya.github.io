@@ -5,7 +5,7 @@ import { createContentLoader } from 'vitepress'
 
 const hostname = 'https://lorikon-seiya.github.io'
 
-export async function createRssFile(config) {
+export async function generateFeed() {
     const feed = new Feed({
         title: 'ccc',
         description: 'ccc blog - 日本旅行、写真、生活、技術',
@@ -37,6 +37,14 @@ export async function createRssFile(config) {
         })
     }
 
-    writeFileSync(path.join(config.outDir, 'feed.rss'), feed.rss2())
-    writeFileSync(path.join(config.outDir, 'atom.xml'), feed.atom1())
+    return {
+        rss: feed.rss2(),
+        atom: feed.atom1()
+    }
+}
+
+export async function createRssFile(config) {
+    const { rss, atom } = await generateFeed()
+    writeFileSync(path.join(config.outDir, 'feed.rss'), rss)
+    writeFileSync(path.join(config.outDir, 'atom.xml'), atom)
 }

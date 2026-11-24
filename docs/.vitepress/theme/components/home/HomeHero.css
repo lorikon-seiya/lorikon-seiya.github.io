@@ -1,16 +1,26 @@
 .hero {
-    padding: 120px 0 80px;
-    max-width: 640px;
+    padding: 80px 0 52px;
+    max-width: 680px;
+}
+
+.eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--vp-c-brand-1);
+    margin: 0 0 14px;
+    display: inline-block;
 }
 
 .typewriter {
-    font-size: clamp(18px, 2.5vw, 26px);
-    font-weight: 400;
-    line-height: 1.6;
-    letter-spacing: -0.01em;
+    font-size: clamp(20px, 2.8vw, 28px);
+    font-weight: 500;
+    line-height: 1.55;
+    letter-spacing: -0.015em;
     color: var(--vp-c-text-1);
     margin: 0 0 14px;
-    min-height: 1.6em;
+    min-height: 1.55em;
 }
 
 .attribution {
@@ -18,4 +28,10 @@
     color: var(--vp-c-text-3);
     margin: 0;
     letter-spacing: 0.03em;
+}
+
+@media (max-width: 640px) {
+    .hero {
+        padding: 56px 0 40px;
+    }
 }

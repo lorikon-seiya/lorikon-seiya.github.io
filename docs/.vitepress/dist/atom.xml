@@ -2,13 +2,366 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lorikon-seiya.github.io</id>
     <title>ccc</title>
-    <updated>2026-11-15T14:29:05.626Z</updated>
+    <updated>2026-11-24T13:31:23.167Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lorikon-seiya.github.io/"/>
     <subtitle>ccc blog - 日本旅行、写真、生活、技術</subtitle>
     <logo>https://lorikon-seiya.github.io/IMG_0906.JPG</logo>
     <icon>https://lorikon-seiya.github.io/favicon.svg</icon>
     <rights>Copyright © 2026 ccc</rights>
+    <entry>
+        <title type="html"><![CDATA[SwiftUI_From_Apple_Dev]]></title>
+        <id>https://lorikon-seiya.github.io/posts/SwiftUI_From_Apple_Dev</id>
+        <link href="https://lorikon-seiya.github.io/posts/SwiftUI_From_Apple_Dev"/>
+        <updated>2026-11-24T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<blockquote>
+<p><a href="https://developer.apple.com/tutorials/app-dev-training/managing-data-flow-between-views" target="_blank" rel="noreferrer">https://developer.apple.com/tutorials/app-dev-training/managing-data-flow-between-views</a>  This is a quote from the website.</p>
+</blockquote>
+<p>这篇文章选自苹果官方的 SwiftUI 经典教程《Scrumdinger》，主题是 <strong>“视图之间的数据流管理（Managing data flow between views）”</strong>。</p>
+<p>在传统的命令式 UI（如 UIKit）中，我们经常需要在界面和数据之间手动同步（例如修改了数据后调用 <code>label.text = ...</code> 或 <code>tableView.reloadData()</code>），这极易出现“UI 显示的内容与实际数据不一致”的 Bug。SwiftUI 采用了<strong>声明式 UI</strong> 模式（即：<code>View = f(State)</code>，界面只是状态的投影）。</p>
+<p>以下为您对文章各核心板块进行<strong>完整、详细、通俗易懂的中文解析与代码实例</strong>：</p>
+]]></summary>
+        <content type="html"><![CDATA[<blockquote>
+<p><a href="https://developer.apple.com/tutorials/app-dev-training/managing-data-flow-between-views" target="_blank" rel="noreferrer">https://developer.apple.com/tutorials/app-dev-training/managing-data-flow-between-views</a>  This is a quote from the website.</p>
+</blockquote>
+<p>这篇文章选自苹果官方的 SwiftUI 经典教程《Scrumdinger》，主题是 <strong>“视图之间的数据流管理（Managing data flow between views）”</strong>。</p>
+<p>在传统的命令式 UI（如 UIKit）中，我们经常需要在界面和数据之间手动同步（例如修改了数据后调用 <code>label.text = ...</code> 或 <code>tableView.reloadData()</code>），这极易出现“UI 显示的内容与实际数据不一致”的 Bug。SwiftUI 采用了<strong>声明式 UI</strong> 模式（即：<code>View = f(State)</code>，界面只是状态的投影）。</p>
+<p>以下为您对文章各核心板块进行<strong>完整、详细、通俗易懂的中文解析与代码实例</strong>：</p>
+<hr>
+<h3 id="一、核心理念-单一可信数据源-source-of-truth" tabindex="-1">一、核心理念：单一可信数据源（Source of Truth） <a class="header-anchor" href="#一、核心理念-单一可信数据源-source-of-truth" aria-label="Permalink to “一、核心理念：单一可信数据源（Source of Truth）”">&#8203;</a></h3>
+<h4 id="_1-什么是单一可信数据源" tabindex="-1">1. 什么是单一可信数据源？ <a class="header-anchor" href="#_1-什么是单一可信数据源" aria-label="Permalink to “1. 什么是单一可信数据源？”">&#8203;</a></h4>
+<ul>
+<li><strong>痛点</strong>：如果在多个视图里各自拷贝、保存一份相同的数据，一旦其中一个视图修改了数据，其他视图没来得及同步，就会产生<strong>数据不一致的 Bug</strong>。</li>
+<li><strong>原则</strong>：<strong>一份数据在整个 App 中应该只有一个“真正拥有它的地方”</strong>（即 Source of Truth）。</li>
+<li><strong>共享机制</strong>：所有需要展示或修改这笔数据的视图，都应该直接读取或引用这个唯一的源头，而不是各自复制一份。</li>
+</ul>
+<h4 id="_2-在-scrumdinger-中的应用" tabindex="-1">2. 在 Scrumdinger 中的应用 <a class="header-anchor" href="#_2-在-scrumdinger-中的应用" aria-label="Permalink to “2. 在 Scrumdinger 中的应用”">&#8203;</a></h4>
+<p>在待办/站会管理应用 Scrumdinger 中：</p>
+<ul>
+<li>真实的站会列表数据最终保存在顶层（如 <code>ScrumdingerApp</code> 或主视图）作为单一可信源；</li>
+<li>下游的各个子视图（如列表页 <code>ScrumsView</code>、详情页 <code>DetailView</code>、编辑页 <code>DetailEditView</code>）都共享这同一份数据。</li>
+</ul>
+<hr>
+<h3 id="二、swift-属性包装器-property-wrappers" tabindex="-1">二、Swift 属性包装器（Property Wrappers） <a class="header-anchor" href="#二、swift-属性包装器-property-wrappers" aria-label="Permalink to “二、Swift 属性包装器（Property Wrappers）”">&#8203;</a></h3>
+<p>SwiftUI 大量使用 Swift 的<strong>属性包装器（Property Wrapper）</strong>机制。它通过在变量前添加 <code>@</code> 符号（如 <code>@State</code>、<code>@Binding</code>），把通用的数据读写、依赖追踪、视图刷新等复杂底层逻辑封装起来。</p>
+<hr>
+<h3 id="三、-state-视图本地的-可信数据源" tabindex="-1">三、<code>@State</code>：视图本地的“可信数据源” <a class="header-anchor" href="#三、-state-视图本地的-可信数据源" aria-label="Permalink to “三、@State：视图本地的“可信数据源””">&#8203;</a></h3>
+<h4 id="_1-作用与生命周期" tabindex="-1">1. 作用与生命周期 <a class="header-anchor" href="#_1-作用与生命周期" aria-label="Permalink to “1. 作用与生命周期”">&#8203;</a></h4>
+<ul>
+<li>当一个属性被标记为 <code>@State</code> 时，你就为当前视图创建了一个<strong>私有、可变的可信源</strong>。</li>
+<li><strong>SwiftUI 底层托管</strong>：SwiftUI 会在外部底层内存中为这个 <code>@State</code> 分配独立的持久存储空间。哪怕当前视图的结构体（Struct）因为重新计算而被销毁重建，该状态值依然会被保留。</li>
+</ul>
+<h4 id="_2-数据驱动-ui-的循环闭环" tabindex="-1">2. 数据驱动 UI 的循环闭环 <a class="header-anchor" href="#_2-数据驱动-ui-的循环闭环" aria-label="Permalink to “2. 数据驱动 UI 的循环闭环”">&#8203;</a></h4>
+<p>整个工作流程是一个单向闭环：</p>
+<div class="language-text"><button title="Copy Code" class="copy"></button><span class="lang">text</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span>  ┌──────────────────────────────────────────────┐</span></span>
+<span class="line"><span>  │                                              │</span></span>
+<span class="line"><span>  ▼                                              │</span></span>
+<span class="line"><span>用户交互 ──> 修改 @State 属性 ──> 触发 View 重新求值 (body)</span></span>
+<span class="line"><span>(点击/输入)     (数据发生改变)           (自动刷新受影响的 UI)</span></span></code></pre>
+</div><ul>
+<li>当 <code>@State</code> 的值发生改变时，系统会自动找出所有依赖该属性的视图组件，并在下一个渲染周期重新执行 <code>body</code> 进行重绘。</li>
+<li>例如：用户修改了会议信息，列表组件会自动刷新显示最新名称。</li>
+</ul>
+<h4 id="_3-为什么声明为-private" tabindex="-1">3. 为什么声明为 <code>private</code>？ <a class="header-anchor" href="#_3-为什么声明为-private" aria-label="Permalink to “3. 为什么声明为 private？”">&#8203;</a></h4>
+<ul>
+<li><code>@State</code> 的设计初衷是管理<strong>瞬态状态（Transient State）</strong>或<strong>视图专属的本地状态</strong>（例如按钮的高亮状态、弹窗是否展开、筛选栏文本、表单编辑中的临时副本等）。</li>
+<li>它归属当前视图专属管理，外部不应直接通过成员初始化器对其随意赋值，因此苹果官方强烈推荐声明为 <code>private</code>。</li>
+</ul>
+<hr>
+<h3 id="四、-binding-双向数据通道" tabindex="-1">四、<code>@Binding</code>：双向数据通道 <a class="header-anchor" href="#四、-binding-双向数据通道" aria-label="Permalink to “四、@Binding：双向数据通道”">&#8203;</a></h3>
+<h4 id="_1-为什么需要-binding" tabindex="-1">1. 为什么需要 <code>@Binding</code>？ <a class="header-anchor" href="#_1-为什么需要-binding" aria-label="Permalink to “1. 为什么需要 @Binding？”">&#8203;</a></h4>
+<p>如果你在子视图里也用 <code>@State</code>，就会产生“第二份数据”，破坏了单一数据源。如果只用普通传参 <code>let scrum: DailyScrum</code>，子视图又无法修改父视图的数据。</p>
+<p><code>@Binding</code> 正好解决了这个问题：</p>
+<ul>
+<li><strong>不拥有数据</strong>：<code>@Binding</code> <strong>本身不存储数据</strong>，它只是一个“双向绑定的引用/指针”。</li>
+<li><strong>双向读写通道（Two-way connection）</strong>：
+<ul>
+<li>子视图<strong>读取</strong> <code>@Binding</code> 时，直接读取父视图的源数据；</li>
+<li>子视图<strong>修改</strong> <code>@Binding</code> 时，直接写入父视图的源数据；</li>
+<li>父视图源数据变化时，绑定了它的子视图自动同步刷新。</li>
+</ul>
+</li>
+</ul>
+<h4 id="_2-传参语法糖-符号" tabindex="-1">2. 传参语法糖：<code>$</code> 符号 <a class="header-anchor" href="#_2-传参语法糖-符号" aria-label="Permalink to “2. 传参语法糖：$ 符号”">&#8203;</a></h4>
+<p>在父视图中把一个 <code>@State</code> 传递给子视图的 <code>@Binding</code> 时，需要在变量前加 <strong><code>$</code></strong> 符号（这会获取属性包装器的 <code>projectedValue</code>，即返回一个 <code>Binding&lt;T&gt;</code> 类型）。</p>
+<hr>
+<h3 id="五、只读数据-read-only-vs-双向绑定-binding-的选择" tabindex="-1">五、只读数据（Read-Only）vs 双向绑定（Binding）的选择 <a class="header-anchor" href="#五、只读数据-read-only-vs-双向绑定-binding-的选择" aria-label="Permalink to “五、只读数据（Read-Only）vs 双向绑定（Binding）的选择”">&#8203;</a></h3>
+<p>在向子视图传递数据时，请根据场景选择：</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th style="text-align:left">传递类型</th>
+<th style="text-align:left">子视图声明方式</th>
+<th style="text-align:left">适用场景</th>
+<th style="text-align:left">父视图传递方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>只读属性</strong></td>
+<td style="text-align:left"><code>let scrum: DailyScrum</code></td>
+<td style="text-align:left">只需要展示，不需要编辑（如卡片预览 <code>CardView</code>）</td>
+<td style="text-align:left"><code>CardView(scrum: scrum)</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>双向绑定</strong></td>
+<td style="text-align:left"><code>@Binding var scrum: DailyScrum</code></td>
+<td style="text-align:left">既要展示，又需要直接在原数据上修改（如编辑页 <code>DetailEditView</code>）</td>
+<td style="text-align:left"><code>DetailEditView(scrum: $scrum)</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="六、scrumdinger-业务场景实战代码演示" tabindex="-1">六、Scrumdinger 业务场景实战代码演示 <a class="header-anchor" href="#六、scrumdinger-业务场景实战代码演示" aria-label="Permalink to “六、Scrumdinger 业务场景实战代码演示”">&#8203;</a></h3>
+<p>下面用一个简化的完整代码示例，直观演示文章提到的整套机制：</p>
+<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SwiftUI</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 1. 数据模型</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">struct</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> DailyScrum</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Identifiable </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> id </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> UUID</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    var</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> title: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">String</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    var</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> attendees: [</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    var</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> lengthInMinutes: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">Int</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 2. 父视图（建立单一可信源）</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">struct</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ScrumsView</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">View </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // 这里是整个列表的可信数据源</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    @State</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> var</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> scrums: [DailyScrum] </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        DailyScrum</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">title</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Design"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">attendees</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Cathy"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Daisy"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">], </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">lengthInMinutes</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">10</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        DailyScrum</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">title</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"App Dev"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">attendees</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Eden"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Karla"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">], </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">lengthInMinutes</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">5</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    ]</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    </span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    var</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> body: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">some</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> View {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        NavigationStack</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            List</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">($scrums) { $scrum </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">in</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">                // $scrum 是从 $scrums 派生出的每一个元素的 Binding</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                NavigationLink</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">destination</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">DetailEditView</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">scrum</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: $scrum)) {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">                    // 只读展示卡片</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                    CardView</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">scrum</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: scrum)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            .</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">navigationTitle</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Daily Scrums"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 3. 子视图 A：仅读取（普通传参）</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">struct</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> CardView</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">View </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> scrum: DailyScrum </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 只读，无需 @Binding</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    </span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    var</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> body: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">some</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> View {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        VStack</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">alignment</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: .leading) {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            Text</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(scrum.title).</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">font</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(.headline)</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            Text</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">\(scrum.</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">attendees</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">count</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">)</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> members"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 4. 子视图 B：需要修改（双向绑定）</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">struct</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> DetailEditView</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">View </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // 声明为 @Binding，不拥有数据，直接双向连接父视图的对应项</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    @Binding</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> var</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> scrum: DailyScrum</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    </span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    var</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> body: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">some</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> View {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        Form</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            Section</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">header</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">Text</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Meeting Info"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)) {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">                // TextField 接收 Binding&#x3C;String>，打通双向修改</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                TextField</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Title"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">text</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: $scrum.title)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                </span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                Slider</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">value</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">Binding</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                    get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">Double</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(scrum.lengthInMinutes) },</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                    set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { scrum.lengthInMinutes </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> Int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">$0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                ), </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">in</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">5</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">...</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">30</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">step</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                    Text</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Length"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                }</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">                Text</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">\(scrum.</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">lengthInMinutes</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">)</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> minutes"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+</div><h4 id="数据流动解析" tabindex="-1">数据流动解析： <a class="header-anchor" href="#数据流动解析" aria-label="Permalink to “数据流动解析：”">&#8203;</a></h4>
+<ol>
+<li>用户进入 <code>DetailEditView</code>，修改了文本框中的会议标题为 <code>&quot;iOS Dev&quot;</code>。</li>
+<li>因为使用了 <code>$scrum.title</code>，输入直接修改了根数据源 <code>ScrumsView</code> 里的 <code>@State var scrums</code>。</li>
+<li><code>ScrumsView</code> 监听到 <code>@State</code> 改变，自动标记受影响的列表行需要刷新。</li>
+<li>返回列表页时，<code>CardView</code> 会立即展示新标题 <code>&quot;iOS Dev&quot;</code>。整个过程<strong>不需要手写任何通知（Notification）、代理（Delegate）或回调闭包</strong>。</li>
+</ol>
+<hr>
+<h3 id="七、核心总结" tabindex="-1">七、核心总结 <a class="header-anchor" href="#七、核心总结" aria-label="Permalink to “七、核心总结”">&#8203;</a></h3>
+<ol>
+<li><strong>Source of Truth（单一数据源）</strong>：数据只存一份，消灭因数据副本不同步而导致的 Bug。</li>
+<li><strong><code>@State</code></strong>：当前视图独占的可变本地数据源，一般用 <code>private</code> 修饰，用于驱动界面局部更新。</li>
+<li><strong><code>@Binding</code></strong>：子视图对已有数据源的“双向连接通道”，自身不存储数据，子视图读写均直接作用于源数据。</li>
+<li><strong>层级无关</strong>：这种机制在任意深度的视图树中都可以层层透传，框架自动追踪依赖并保证全局 UI 实时同步。</li>
+</ol>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[SwiftUI_Closures]]></title>
+        <id>https://lorikon-seiya.github.io/posts/SwiftUI_Closures</id>
+        <link href="https://lorikon-seiya.github.io/posts/SwiftUI_Closures"/>
+        <updated>2026-11-19T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<h1 id="swiftui-closures" tabindex="-1">SwiftUI_Closures <a class="header-anchor" href="#swiftui-closures" aria-label="Permalink to “SwiftUI_Closures”">&#8203;</a></h1>
+<p>在 Swift 和 SwiftUI 开发中，<strong>闭包（Closures）</strong>是最核心的基础语法之一。我们在写 SwiftUI（例如 <code>VStack { ... }</code>、<code>Button(action: { ... })</code>、<code>attendees.map { ... }</code>）时，几乎每一行都在和闭包打交道。</p>
+<p>以下为您系统梳理 Swift 官方文档中闭包的核心要点、语法糖演进过程以及在 SwiftUI / Scrumdinger 中的具体应用：</p>
+]]></summary>
+        <content type="html"><![CDATA[<h1 id="swiftui-closures" tabindex="-1">SwiftUI_Closures <a class="header-anchor" href="#swiftui-closures" aria-label="Permalink to “SwiftUI_Closures”">&#8203;</a></h1>
+<p>在 Swift 和 SwiftUI 开发中，<strong>闭包（Closures）</strong>是最核心的基础语法之一。我们在写 SwiftUI（例如 <code>VStack { ... }</code>、<code>Button(action: { ... })</code>、<code>attendees.map { ... }</code>）时，几乎每一行都在和闭包打交道。</p>
+<p>以下为您系统梳理 Swift 官方文档中闭包的核心要点、语法糖演进过程以及在 SwiftUI / Scrumdinger 中的具体应用：</p>
+<hr>
+<h3 id="一、什么是闭包" tabindex="-1">一、什么是闭包？ <a class="header-anchor" href="#一、什么是闭包" aria-label="Permalink to “一、什么是闭包？”">&#8203;</a></h3>
+<p>闭包是<strong>可以捕获并存储其所在上下文中常量或变量引用的独立代码块</strong>。在其他语言中它也被称为匿名函数、Lambda 或 Block。</p>
+<p>在 Swift 中，函数其实是闭包的一种特例：</p>
+<ol>
+<li><strong>全局函数（Global Functions）</strong>：有名字、但不捕获任何值的闭包。</li>
+<li><strong>嵌套函数（Nested Functions）</strong>：有名字、能捕获外层函数变量的闭包。</li>
+<li><strong>闭包表达式（Closure Expressions）</strong>：轻量级匿名语法，能捕获上下文变量。</li>
+</ol>
+<hr>
+<h3 id="二、闭包表达式的-5-步语法糖演变-以数组排序为例" tabindex="-1">二、闭包表达式的 5 步语法糖演变（以数组排序为例） <a class="header-anchor" href="#二、闭包表达式的-5-步语法糖演变-以数组排序为例" aria-label="Permalink to “二、闭包表达式的 5 步语法糖演变（以数组排序为例）”">&#8203;</a></h3>
+<p>假设我们有一个名字数组需要按字母降序排列：</p>
+<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> names </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Chris"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Alex"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Ewa"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Barry"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Daniella"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]</span></span></code></pre>
+</div><h4 id="第-0-步-传统具名函数方式" tabindex="-1">第 0 步：传统具名函数方式 <a class="header-anchor" href="#第-0-步-传统具名函数方式" aria-label="Permalink to “第 0 步：传统具名函数方式”">&#8203;</a></h4>
+<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">func</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> backward</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">_</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> s1: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">_</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> s2: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-></span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> Bool</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> s1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> s2</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">var</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> reversedNames </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> names.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">sorted</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">by</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: backward)</span></span></code></pre>
+</div><h4 id="第-1-步-标准闭包表达式语法-in-关键字分隔参数与函数体" tabindex="-1">第 1 步：标准闭包表达式语法 (<code>in</code> 关键字分隔参数与函数体) <a class="header-anchor" href="#第-1-步-标准闭包表达式语法-in-关键字分隔参数与函数体" aria-label="Permalink to “第 1 步：标准闭包表达式语法 (in 关键字分隔参数与函数体)”">&#8203;</a></h4>
+<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 语法形式：{ (参数列表) -> 返回类型 in 代码语句 }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">reversedNames </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> names.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">sorted</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">by</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { (</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">s1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">s2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-></span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> Bool</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> in</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> s1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> s2</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span></code></pre>
+</div><h4 id="第-2-步-由上下文推断类型-省略参数类型与返回值类型" tabindex="-1">第 2 步：由上下文推断类型（省略参数类型与返回值类型） <a class="header-anchor" href="#第-2-步-由上下文推断类型-省略参数类型与返回值类型" aria-label="Permalink to “第 2 步：由上下文推断类型（省略参数类型与返回值类型）”">&#8203;</a></h4>
+<p>因为 <code>names</code> 是 <code>[String]</code>，Swift 编译器能自动推导出 <code>s1</code> 和 <code>s2</code> 是 <code>String</code>，返回值是 <code>Bool</code>：</p>
+<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">reversedNames </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> names.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">sorted</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">by</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { s1, s2 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">in</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> s1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> s2 })</span></span></code></pre>
+</div><h4 id="第-3-步-单表达式隐式返回-省略-return" tabindex="-1">第 3 步：单表达式隐式返回（省略 <code>return</code>） <a class="header-anchor" href="#第-3-步-单表达式隐式返回-省略-return" aria-label="Permalink to “第 3 步：单表达式隐式返回（省略 return）”">&#8203;</a></h4>
+<p>如果闭包体内只有单行表达式，该表达式的计算结果会自动作为返回值：</p>
+<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">reversedNames </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> names.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">sorted</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">by</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { s1, s2 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">in</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> s1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> s2 })</span></span></code></pre>
+</div><h4 id="第-4-步-简写参数名-shorthand-0-1" tabindex="-1">第 4 步：简写参数名（Shorthand <code>$0</code>, <code>$1</code>, ...） <a class="header-anchor" href="#第-4-步-简写参数名-shorthand-0-1" aria-label="Permalink to “第 4 步：简写参数名（Shorthand $0, $1, ...）”">&#8203;</a></h4>
+<p>Swift 自动为内联闭包提供 <code>$0</code>（第1个参数）、<code>$1</code>（第2个参数）等占位名，省略参数定义和 <code>in</code>：</p>
+<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">reversedNames </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> names.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">sorted</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">by</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">$0</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> ></span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> $1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> })</span></span></code></pre>
+</div><h4 id="第-5-步-运算符方法-operator-methods" tabindex="-1">第 5 步：运算符方法（Operator Methods） <a class="header-anchor" href="#第-5-步-运算符方法-operator-methods" aria-label="Permalink to “第 5 步：运算符方法（Operator Methods）”">&#8203;</a></h4>
+<p>Swift 中 <code>&gt;</code> 本身就是一个函数 <code>(String, String) -&gt; Bool</code>，因此可以直接传入运算符：</p>
+<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">reversedNames </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> names.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">sorted</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">by</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span></code></pre>
+</div><hr>
+<h3 id="三、尾随闭包-trailing-closures-——-为什么-swiftui-里到处都是" tabindex="-1">三、尾随闭包（Trailing Closures）—— 为什么 SwiftUI 里到处都是 <code>{}</code> <a class="header-anchor" href="#三、尾随闭包-trailing-closures-——-为什么-swiftui-里到处都是" aria-label="Permalink to “三、尾随闭包（Trailing Closures）—— 为什么 SwiftUI 里到处都是 {}”">&#8203;</a></h3>
+<p>如果闭包是函数的<strong>最后一个参数</strong>，可以将其写在圆括号外部；如果函数<strong>只有这一个闭包参数</strong>，圆括号甚至可以完全省略：</p>
+<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 普通写法</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">names.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">sorted</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">by</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">$0</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> ></span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> $1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> })</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 尾随闭包写法（省略圆括号）</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">names.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">sorted</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">$0</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> ></span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> $1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span></code></pre>
+</div><h4 id="为什么这对-swiftui-至关重要" tabindex="-1">为什么这对 SwiftUI 至关重要？ <a class="header-anchor" href="#为什么这对-swiftui-至关重要" aria-label="Permalink to “为什么这对 SwiftUI 至关重要？”">&#8203;</a></h4>
+<p>在 Scrumdinger 中，几乎所有容器和视图构建器（ViewBuilder）都是尾随闭包：</p>
+<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 1. Button: 最后一个参数是 label 闭包</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">Button</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">action</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    print</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Next speaker"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}) {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    Image</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">systemName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"forward.fill"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 2. 多尾随闭包（Multiple Trailing Closures）</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 如果有多个尾随闭包，第一个闭包省略标签，后续闭包附带标签</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">Button</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // action 闭包</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">} </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">label</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // label 闭包</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    Text</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Next"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+</div><hr>
+<h3 id="四、值捕获-capturing-values-与引用类型" tabindex="-1">四、值捕获（Capturing Values）与引用类型 <a class="header-anchor" href="#四、值捕获-capturing-values-与引用类型" aria-label="Permalink to “四、值捕获（Capturing Values）与引用类型”">&#8203;</a></h3>
+<p>闭包是<strong>引用类型（Reference Types）</strong>。闭包可以在其定义的上下文中<strong>捕获（Capture）</strong>常量和变量，即使定义这些变量的作用域已经销毁，闭包依然能读写它们：</p>
+<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">func</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> makeIncrementer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forIncrement</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> amount: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">Int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-></span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> Int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    var</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> runningTotal </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 0</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    func</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> incrementer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-></span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> Int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        runningTotal </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> amount </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 捕获了外层的 runningTotal 和 amount</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> runningTotal</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> incrementer</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> incrementByTen </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> makeIncrementer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">forIncrement</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">10</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">incrementByTen</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 返回 10</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">incrementByTen</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 返回 20</span></span></code></pre>
+</div><blockquote>
+<p><strong>注意内存循环引用</strong>：
+如果闭包被某个类实例强持有，且闭包内部又强引用了 <code>self</code>，会导致强引用循环（内存泄漏）。此时需要使用捕获列表：</p>
+<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{ [</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">weak</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">] </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">in</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    self</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">doSomething</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+</div></blockquote>
+<hr>
+<h3 id="五、逃逸闭包-escaping-与自动闭包-autoclosure" tabindex="-1">五、逃逸闭包（<code>@escaping</code>）与自动闭包（<code>@autoclosure</code>） <a class="header-anchor" href="#五、逃逸闭包-escaping-与自动闭包-autoclosure" aria-label="Permalink to “五、逃逸闭包（@escaping）与自动闭包（@autoclosure）”">&#8203;</a></h3>
+<table tabindex="0">
+<thead>
+<tr>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">关键字</th>
+<th style="text-align:left">说明</th>
+<th style="text-align:left">常见场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>非逃逸闭包 (默认)</strong></td>
+<td style="text-align:left">无需修饰</td>
+<td style="text-align:left">闭包在函数返回<strong>之前</strong>同步执行完毕，不会被存留到函数外。</td>
+<td style="text-align:left"><code>map</code>、<code>filter</code>、<code>forEach</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>逃逸闭包</strong></td>
+<td style="text-align:left"><code>@escaping</code></td>
+<td style="text-align:left">闭包在函数返回<strong>之后</strong>才被调用（例如被存入外部变量、异步回调中）。</td>
+<td style="text-align:left">网络请求回调、异步计时器 <code>Timer</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>自动闭包</strong></td>
+<td style="text-align:left"><code>@autoclosure</code></td>
+<td style="text-align:left">自动将传入的普通表达式包裹成一个无参闭包，实现<strong>延迟计算</strong>。</td>
+<td style="text-align:left"><code>assert(...)</code> 条件判断、<code>??</code> 空合运算符</td>
+</tr>
+</tbody>
+</table>
+<h4 id="escaping-示例-如网络加载或定时器" tabindex="-1"><code>@escaping</code> 示例（如网络加载或定时器）： <a class="header-anchor" href="#escaping-示例-如网络加载或定时器" aria-label="Permalink to “@escaping 示例（如网络加载或定时器）：”">&#8203;</a></h4>
+<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">var</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> completionHandlers: [() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-></span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> Void</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">] </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> []</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">func</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> performTask</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">handler</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@escaping</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-></span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> Void</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // 闭包没有立即执行，而是存到了全局数组中，函数退出后才可能被调用</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    completionHandlers.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">append</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(handler)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+</div><h4 id="autoclosure-示例-延迟求值" tabindex="-1"><code>@autoclosure</code> 示例（延迟求值）： <a class="header-anchor" href="#autoclosure-示例-延迟求值" aria-label="Permalink to “@autoclosure 示例（延迟求值）：”">&#8203;</a></h4>
+<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">func</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> logIfDebug</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">_</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> message: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@autoclosure</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-></span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    #</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> DEBUG</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    print</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">message</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()) </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 只有在 DEBUG 模式下才会真正计算传入的表达式，避免无谓计算</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    #</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">endif</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">logIfDebug</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Complex calculations: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">\(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">heavyComputation</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">())</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span></code></pre>
+</div><hr>
+<h3 id="六、联系-scrumdinger-闭包在项目中的实际应用" tabindex="-1">六、联系 Scrumdinger：闭包在项目中的实际应用 <a class="header-anchor" href="#六、联系-scrumdinger-闭包在项目中的实际应用" aria-label="Permalink to “六、联系 Scrumdinger：闭包在项目中的实际应用”">&#8203;</a></h3>
+<p>回顾我们在 Scrumdinger 中编写的代码：</p>
+<ol>
+<li><strong><code>map</code> 中的简写闭包</strong>：<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 将 [String] 转换成 [Attendee]</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">self</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.attendees </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> attendees.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">map</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">Attendee</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">$0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) }</span></span></code></pre>
+</div></li>
+<li><strong>视图动作回调闭包</strong>：<div class="language-swift"><button title="Copy Code" class="copy"></button><span class="lang">swift</span><pre class="shiki shiki-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e" tabindex="0" dir="ltr" v-pre=""><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// MeetingFooterView 接收一个函数类型的 skipAction 属性</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">struct</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MeetingFooterView</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">View </span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    let</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> skipAction: () </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-></span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> Void</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // 闭包类型</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    </span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    var</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> body: </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">some</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> View {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        Button</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">action</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: skipAction) {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">            Image</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">systemName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"forward.fill"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+</div></li>
+<li><strong>SwiftUI 的 <code>@ViewBuilder</code> 内容闭包</strong>：
+<code>VStack { ... }</code>、<code>ZStack { ... }</code> 内部都是通过闭包构建子视图层次。</li>
+</ol>
+<p>理解了闭包的语法演进和特性后，阅读与编写 SwiftUI 代码就会变得非常直观。如果对 <code>@escaping</code>、循环引用捕获列表 <code>[weak self]</code> 或在 Scrumdinger 里的具体用法有疑问，随时告诉我！</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[外国人の言語学習について]]></title>
         <id>https://lorikon-seiya.github.io/posts/nihonngo-study</id>

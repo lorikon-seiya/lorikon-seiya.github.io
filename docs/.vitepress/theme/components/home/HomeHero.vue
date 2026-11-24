@@ -15,6 +15,7 @@ defineProps({
 
 <template>
     <div class="hero">
+        <span class="eyebrow">Thoughts & Moments</span>
         <p class="typewriter">
             <TypeWriter :texts="texts" :type-speed="80" :pause-time="2000" />
         </p>

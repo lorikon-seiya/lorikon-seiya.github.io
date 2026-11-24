@@ -1,0 +1,189 @@
+.custom-footer {
+    width: 100%;
+    border-top: 1px solid var(--vp-c-divider);
+    background-color: var(--vp-c-bg);
+    padding: 64px 24px 48px;
+    box-sizing: border-box;
+    transition: background-color 0.25s, border-color 0.25s;
+}
+
+/* 具有侧边栏的文章页面在桌面端的自适应偏移 */
+@media (min-width: 960px) {
+    .custom-footer.has-sidebar {
+        padding-left: calc(var(--vp-sidebar-width) + 48px);
+        padding-right: 48px;
+    }
+}
+
+.footer-container {
+    max-width: var(--blog-wide-width, 1120px);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* 上半部分：品牌理念与两翼导航 */
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 48px;
+}
+
+/* 品牌与站长简述 */
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 380px;
+}
+
+.brand-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--vp-c-divider);
+}
+
+.brand-title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--vp-c-text-1);
+    margin: 0;
+}
+
+.brand-tagline {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--vp-c-text-2);
+    margin: 0;
+}
+
+/* 常驻地点徽章 */
+.location-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--vp-c-text-3);
+    background: var(--vp-c-bg-soft);
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--vp-c-divider);
+    width: fit-content;
+}
+
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+/* 右侧链接组合 */
+.footer-nav-groups {
+    display: flex;
+    gap: 56px;
+}
+
+.nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.group-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--vp-c-text-3);
+    margin-bottom: 4px;
+}
+
+.nav-link {
+    font-size: 13px;
+    color: var(--vp-c-text-2);
+    text-decoration: none;
+    transition: color 0.15s ease, transform 0.15s ease;
+    display: inline-block;
+}
+
+.nav-link:hover {
+    color: var(--vp-c-brand-1);
+    transform: translateX(2px);
+}
+
+/* 分割细线 */
+.footer-divider {
+    width: 100%;
+    height: 1px;
+    background: var(--vp-c-divider);
+}
+
+/* 下半部分：版权与声明 */
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--vp-c-text-3);
+}
+
+.footer-bottom p {
+    margin: 0;
+}
+
+.built-with a {
+    color: var(--vp-c-text-2);
+    text-decoration: none;
+}
+
+.built-with a:hover {
+    color: var(--vp-c-brand-1);
+}
+
+.heart {
+    color: #ef4444;
+    display: inline-block;
+    animation: heart-beat 1.8s ease-in-out infinite;
+}
+
+@keyframes heart-beat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+/* 响应式适配移动端屏幕 */
+@media (max-width: 640px) {
+    .custom-footer {
+        padding: 48px 20px 40px;
+    }
+
+    .footer-top {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .footer-nav-groups {
+        width: 100%;
+        justify-content: space-between;
+        gap: 24px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
